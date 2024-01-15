@@ -90,9 +90,18 @@
                 <div>
                     <p class="text-xs font-medium my-2">Lists</p>
                     <ul class="ml-1 pb-5 border-b">
+                        <li>
+                            <a href="/" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 <% if(!listId){ %> active-link <% } %>">
+                                <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                    <span class="border-2 h-4 w-4 inline-block mr-3 rounded-md"></span>
+                                    All
+                                </p>
+                                <span class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white"><%= countTaskData %></span>
+                            </a>
+                        </li>
                         <% for(let lData of listData){ %>
                             <li>
-                                <a href="" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
+                                <a href="/viewTaskOnList/?id=<%= lData.id %>" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 <% if(listId == lData.id){ %> active-link <% } %>">
                                     <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
                                         <span class="bg-[<%= lData.listColor %>] h-4 w-4 inline-block mr-3 rounded-md"></span>
                                         <%= lData.listName %>
@@ -180,7 +189,7 @@
                                 </p>
                             </button>
                         </li>
-                        <% for(let tData of taskData){ %>
+                        <% if(taskData != ""){ for(let tData of taskData){ %>
                             <li class="border-b hover:rounded-lg trasition-all duration-300 mt-1">
                                 <div class="sub flex flex-wrap items-center justify-between hover:bg-gray-300 duration-300 rounded-lg py-2 px-3">
                                     <div class="w-11/12">
@@ -229,6 +238,10 @@
                                         <i class="fa-solid fa-calendar-xmark"></i>
                                     </span>
                                 </div> -->
+                            </li>
+                        <% } } else{ %>
+                            <li class="border-b hover:rounded-lg trasition-all duration-300 py-3 text-center">
+                                <p class="text-3xl text-stone-500">No avaliable task</p>
                             </li>
                         <% } %>
                     </ul>

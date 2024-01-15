@@ -20,4 +20,6 @@ routes.get("/add_list_model", homeController.add_list_model);
 
 routes.post("/insertList", homeController.insertList);
 
+routes.get("/viewTaskOnList", homeController.viewTaskOnList);
+
 module.exports = routes;

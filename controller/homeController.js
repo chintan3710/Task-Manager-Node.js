@@ -6,9 +6,13 @@ module.exports.home = async (req, res) => {
     try {
         let taskData = await Task.find({}).populate("taskList").exec();
         let listData = await List.find({});
+        let countTaskData = await Task.find({}).countDocuments();
+        let listId = "";
         return res.render("home", {
             taskData: taskData,
             listData: listData,
+            countTaskData: countTaskData,
+            listId: listId,
         });
     } catch (err) {
         console.log(err);
@@ -215,6 +219,36 @@ module.exports.insertList = async (req, res) => {
             }
         } else {
             console.log("Something went wrong");
+            return res.redirect("back");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.viewTaskOnList = async (req, res) => {
+    try {
+        if (req.query) {
+            let taskData = await Task.find({ taskList: req.query.id })
+                .populate("taskList")
+                .exec();
+            let countTaskData = await Task.find({}).countDocuments();
+            let listData = await List.find({});
+            let listId = req.query.id;
+            if (taskData) {
+                return res.render("home", {
+                    taskData: taskData,
+                    listData: listData,
+                    countTaskData: countTaskData,
+                    listId: listId,
+                });
+            } else {
+                console.log("Task not found");
+                return res.redirect("back");
+            }
+        } else {
+            console.log("Invalid parameters");
             return res.redirect("back");
         }
     } catch (err) {
