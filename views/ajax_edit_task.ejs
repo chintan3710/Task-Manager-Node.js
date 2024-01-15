@@ -1,0 +1,54 @@
+<div class="absolute top-0 left-0 right-0 bottom-0 p-5 bg-[#f4f4f4]">
+    <div class="flex items-center justify-between text-xl">
+        <h2>Edit Task:</h2>
+        <button onclick="return closeModel()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+    <form method="post" action="/editTask" class="flex flex-col justify-between h-[95%]">
+        <input type="hidden" value="<%= taskData.id %>" name="oldId">
+        <div>
+            <div class="mt-5">
+                <label for="task-name" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Enter Task Name:</label>
+                <input type="text" name="taskName" id="task-name" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" value="<%= taskData.taskName %>" required>
+            </div>
+            <div class="mt-5">
+                <label for="description" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Enter description (Optional):</label>
+                <textarea rows="5" type="text" name="description" id="description" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 resize-none"><%= taskData.description %></textarea>
+            </div>
+            <div class="mt-5">
+                <label for="task-list" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Assign To List:</label>
+                <select name="taskList" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" id="task-list">
+                    <option value="" disabled="" selected="">-- Select Task List --</option>
+                    <% listData.map((v, i) => { %>
+                        <option value="<%= v.id %>" <% if(v.id == taskData.taskList){ %> selected <% } %>><%= v.listName %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="mt-5">
+                <label for="due-date" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Due Date:</label>
+                <input type="date" name="dueDate" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 px-3 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" id="due-date" value="<%= taskData.dueDate %>">
+            </div>
+            <div class="mt-5">
+                <label class="block text-sm font-medium leading-6 text-gray-600 mb-2">Task Tags (Optional):</label>
+                <% tags = ["Communication", "Research", "Travelling", "Testing"] %>
+                <div class="flex flex-wrap ml-3">
+                    <% tags.map((v, i) => { %>
+                        <label class="flex">
+                            <input type="checkbox" value="<%= v %>" name="taskTags[]" <% if(taskData.taskTags.includes(v)){ %> checked <% } %>>
+                            <span class="mx-2"><%= v %></span>
+                        </label>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+        <div class="flex">
+            <div class="w-6/12 mt-5 me-2">
+                <a href="deleteTask/?id=<%= taskData.id %>" type="submit" class="w-full cursor-pointer border text-black font-semibold py-2 px-4 rounded text-center">Delete Task</a>
+            </div>
+            <div class="w-6/12 mt-5 ms-2">
+                <input type="submit" class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded" value="Save Changes">
+            </div>
+        </div>
+    </form>
+</div>
