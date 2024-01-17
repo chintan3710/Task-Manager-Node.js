@@ -22,4 +22,10 @@ routes.post("/insertList", homeController.insertList);
 
 routes.get("/viewTaskOnList", homeController.viewTaskOnList);
 
+routes.post("/edit_list_model", homeController.edit_list_model);
+
+routes.get("/deleteList", homeController.deleteList);
+
+routes.post("/editList", homeController.editList);
+
 module.exports = routes;

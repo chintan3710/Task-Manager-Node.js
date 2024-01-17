@@ -27,229 +27,236 @@
     <body>
 
         <!-- Header -->
-        <header class="bg-[#f4f4f4] h-screen w-[300px] px-10 py-5 fixed top-0 left-0 bottom-0" id="header">
-            <nav class="h-full flex flex-col justify-between">
-                <!-- Logo & Toggle -->
-                <div class="text-center">
-                    <a href="/">Logo</a>
-                    <!-- <button id="toggle-btn" class="toggle-btn text-stone-400 text-2xl">
-                        <i class="fa-solid fa-bars"></i>
-                    </button> -->
-                </div>
+        <div id="ajax-home">
+            <header class="bg-[#f4f4f4] h-screen w-[300px] px-10 py-5 fixed top-0 left-0 bottom-0" id="header">
+                <nav class="h-full flex flex-col justify-between">
+                    <!-- Logo & Toggle -->
+                    <div class="text-center">
+                        <a href="/">Logo</a>
+                        <!-- <button id="toggle-btn" class="toggle-btn text-stone-400 text-2xl">
+                            <i class="fa-solid fa-bars"></i>
+                        </button> -->
+                    </div>
 
-                <!-- Search Bar -->
-                <!-- <div class="relative w-fit">
-                    <input type="search" class="border rounded-lg py-1 pr-4 pl-8" placeholder="Search"/>
-                    <span class="text-stone-400 absolute left-2 top-2/4 -translate-y-2/4">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </span>
-                </div> -->
+                    <!-- Search Bar -->
+                    <!-- <div class="relative w-fit">
+                        <input type="search" class="border rounded-lg py-1 pr-4 pl-8" placeholder="Search"/>
+                        <span class="text-stone-400 absolute left-2 top-2/4 -translate-y-2/4">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                    </div> -->
 
-                <!-- Tasks Table -->
-                <div>
-                    <p class="text-xs font-medium my-2">TASKS</p>
-                    <ul class="ml-1 pb-5 border-b">
-                        <li>
-                            <a href="" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
-                                <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
-                                    <i class="fa-solid fa-angles-right text-zinc-400 mr-3"></i>
-                                    Upcoming
-                                </p>
-                                <span class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white">12</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 active-link">
-                                <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
-                                    <i class="fa-solid fa-list-check text-zinc-400 mr-3"></i>
-                                    Today
-                                </p>
-                                <span class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white">5</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
-                                <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
-                                    <i class="fa-solid fa-calendar-days text-zinc-400 mr-3"></i>
-                                    Calender
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
-                                <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
-                                    <i class="fa-solid fa-note-sticky text-zinc-400 mr-3"></i>
-                                    Sticky Wall
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Lists Table -->
-                <div>
-                    <p class="text-xs font-medium my-2">Lists</p>
-                    <ul class="ml-1 pb-5 border-b">
-                        <li>
-                            <a href="/" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 <% if(!listId){ %> active-link <% } %>">
-                                <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
-                                    <span class="border-2 h-4 w-4 inline-block mr-3 rounded-md"></span>
-                                    All
-                                </p>
-                                <span class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white"><%= countTaskData %></span>
-                            </a>
-                        </li>
-                        <% for(let lData of listData){ %>
+                    <!-- Tasks Table -->
+                    <div>
+                        <p class="text-xs font-medium my-2">TASKS</p>
+                        <ul class="ml-1 pb-5 border-b">
                             <li>
-                                <a href="/viewTaskOnList/?id=<%= lData.id %>" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 <% if(listId == lData.id){ %> active-link <% } %>">
+                                <a href="" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
                                     <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
-                                        <span class="bg-[<%= lData.listColor %>] h-4 w-4 inline-block mr-3 rounded-md"></span>
-                                        <%= lData.listName %>
+                                        <i class="fa-solid fa-angles-right text-zinc-400 mr-3"></i>
+                                        Upcoming
                                     </p>
-                                    <span class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white"><%= lData.taskIds.length %></span>
+                                    <span class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white">12</span>
                                 </a>
                             </li>
-                        <% } %>
-                        <li>
-                            <button onclick="return listModel()" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 w-full">
-                                <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
-                                    <span class="h-4 w-4 inline-block mr-3 rounded-md mb-[4px]">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </span>
-                                    Add New List
-                                </p>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Tags Table -->
-                <div>
-                    <p class="text-xs font-medium my-2">Tags</p>
-                    <ul class="pb-5 flex flex-wrap">
-                        <li class="mr-1">
-                            <a href="" class="group font-bold text-[13px] bg-[#d1eaed] py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
-                                Tag 1
-                            </a>
-                        </li>
-                        <li class="mr-1">
-                            <a href="" class="group font-bold text-[13px] bg-[#ffdada] py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
-                                Tag 2
-                            </a>
-                        </li>
-                        <li class="mr-1">
-                            <a href="" class="group font-bold text-[13px] bg-[#ebebeb] py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
-                                + Add Tag
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Account Table -->
-                <div>
-                    <ul>
-                        <li>
-                            <a href="" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
-                                <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
-                                    <i class="fa-solid fa-user text-zinc-400 mr-3"></i>
-                                    Profile
-                                </p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
-                                <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
-                                    <i class="fa-solid fa-power-off text-zinc-400 mr-3"></i>
-                                    Log Out
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-
-        <main class="ml-[300px] px-6">
-            <div id="after-flex">
-                <section id="main-body">
-                    <div class="pt-3 pb-8">
-                        <h2 class="text-4xl font-bold">
-                            Today
-                            <span class="border font-semibold inline-block h-[45px] w-[45px] text-center leading-[45px] rounded-lg ml-5"><%= taskData.length %></span>
-                        </h2>
+                            <li>
+                                <a href="/" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 active-link">
+                                    <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                        <i class="fa-solid fa-list-check text-zinc-400 mr-3"></i>
+                                        Today
+                                    </p>
+                                    <span class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white"><%= taskData.length %></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
+                                    <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                        <i class="fa-solid fa-calendar-days text-zinc-400 mr-3"></i>
+                                        Calender
+                                    </p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
+                                    <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                        <i class="fa-solid fa-note-sticky text-zinc-400 mr-3"></i>
+                                        Sticky Wall
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <ul>
-                        <li>
-                            <button onclick="return taskModel()" class="w-full group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 border">
-                                <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
-                                    <span class="h-4 w-4 inline-block mr-3 rounded-md mb-[4px]">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </span>
-                                    Add New Task
-                                </p>
-                            </button>
-                        </li>
-                        <% if(taskData != ""){ for(let tData of taskData){ %>
-                            <li class="border-b hover:rounded-lg trasition-all duration-300 mt-1">
-                                <div class="sub flex flex-wrap items-center justify-between hover:bg-gray-300 duration-300 rounded-lg py-2 px-3">
-                                    <div class="w-11/12">
-                                        <label for="task" class="flex items-center">
-                                            <input type="checkbox" id="task">
-                                            <p class="font-medium text-sm text-stone-500 ml-3">
-                                                <%= tData.taskName %>
+
+                    <!-- Lists Table -->
+                    <div>
+                        <p class="text-xs font-medium my-2">Lists</p>
+                        <ul class="ml-1 pb-5 border-b">
+                            <li>
+                                <a href="/" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 <% if(!listId){ %> active-link <% } %>">
+                                    <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                        <span class="border-2 h-4 w-4 inline-block mr-3 rounded-md"></span>
+                                        All
+                                    </p>
+                                    <span class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white"><%= countTaskData %></span>
+                                </a>
+                            </li>
+                            <% for(let lData of listData){ %>
+                                <li class="relative">
+                                    <div class="group py-2 px-3 flex items-center justify-between rounded-lg hover:bg-gray-300 trasition-all duration-500 <% if(listId == lData.id){ %> active-link <% } %>">
+                                        <button onclick="return viewTaskOnListFun('<%= lData.id %>')" class="flex justify-between w-[-webkit-fill-available]">
+                                            <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black before:bg-[<%= lData.listColor %>] before:h-4 before:w-4 before:inline-block before:mr-3 before:rounded-md">
+                                                <%= lData.listName %>
                                             </p>
-                                        </label>
-                                    </div>
-                                    <div class="w-1/12 text-end">
-                                        <button onclick="return editTaskModel('<%= tData.id %>')" class="rounded-lg trasition-all text-stone-500 duration-500">
-                                            <i class="fa-solid fa-angle-right"></i>
+                                            <span class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white mr-5"><%= lData.taskIds.length %></span>
+                                        </button>
+                                        <button onclick="return editListModel('<%= lData.id %>')">
+                                            <span class="text-xs text-stone-500">
+                                                <i class="fa-solid fa-angle-right"></i>
+                                            </span>
                                         </button>
                                     </div>
-                                    <% dd = tData.dueDate.split(/\D/g) %>
-                                    <% let date = [dd[2],dd[1],dd[0]].join("-") %>
-                                    <div class="ml-6">
-                                        <div class="flex items-center">
-                                            <span class="flex items-center">
-                                                <i class="font-medium text-stone-500 ms-0.5 fa-solid fa-calendar-xmark"></i>
-                                                <p class="font-medium text-xs text-stone-500 ml-2"><%= date %></p>
-                                            </span>
-                                            <span class="w-[1.5px] h-5 bg-zinc-200 mx-5"></span>
-                                            <span class="flex items-center">
-                                                <span class="bg-[<%= tData.taskList.listColor %>] h-4 w-4 inline-block rounded-md"></span>
-                                                <p class="font-medium text-xs text-stone-500 ml-2"><%= tData.taskList.listName %></p>
-                                            </span>
-                                            <span class="w-[2px] h-5 bg-zinc-200 mx-5"></span>
-                                            <span class="flex items-center">
-                                                <% tData.taskTags.map((v, i)=>{ %>
-                                                    <span class="font-bold text-[13px] bg-[#d1eaed] py-[5px] px-3 rounded-lg ms-2">
-                                                        <p class="font-medium text-xs text-stone-500">
-                                                            <%= v %>
-                                                        </p>
-                                                    </span>
-                                                <% }) %>
-                                            </span>
-                                            
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- <div class=" items-center justify-between hover:bg-gray-300 rounded-lg">
-                                    <span class="ml-6">
-                                        <i class="fa-solid fa-calendar-xmark"></i>
-                                    </span>
-                                </div> -->
+                                </li>
+                            <% } %>
+                            <li>
+                                <button onclick="return listModel()" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 w-full">
+                                    <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                        <span class="h-4 w-4 inline-block mr-3 rounded-md mb-[4px]">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </span>
+                                        Add New List
+                                    </p>
+                                </button>
                             </li>
-                        <% } } else{ %>
-                            <li class="border-b hover:rounded-lg trasition-all duration-300 py-3 text-center">
-                                <p class="text-3xl text-stone-500">No avaliable task</p>
-                            </li>
-                        <% } %>
-                    </ul>
-                </section>
+                        </ul>
+                    </div>
 
-                <section id="task-model" class="relative"></section>
-            </div>
-        </main>
+                    <!-- Tags Table -->
+                    <div>
+                        <p class="text-xs font-medium my-2">Tags</p>
+                        <ul class="pb-5 flex flex-wrap">
+                            <li class="mr-1">
+                                <a href="" class="group font-bold text-[13px] bg-[#d1eaed] py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
+                                    Tag 1
+                                </a>
+                            </li>
+                            <li class="mr-1">
+                                <a href="" class="group font-bold text-[13px] bg-[#ffdada] py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
+                                    Tag 2
+                                </a>
+                            </li>
+                            <li class="mr-1">
+                                <a href="" class="group font-bold text-[13px] bg-[#ebebeb] py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
+                                    + Add Tag
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Account Table -->
+                    <div>
+                        <ul>
+                            <li>
+                                <a href="" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
+                                    <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                        <i class="fa-solid fa-user text-zinc-400 mr-3"></i>
+                                        Profile
+                                    </p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
+                                    <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                        <i class="fa-solid fa-power-off text-zinc-400 mr-3"></i>
+                                        Log Out
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            <main class="ml-[300px] px-6">
+                <div id="after-flex">
+                    <section id="main-body">
+                        <div class="pt-3 pb-8">
+                            <h2 class="text-4xl font-bold">
+                                Today
+                                <span class="border font-semibold inline-block h-[45px] w-[45px] text-center leading-[45px] rounded-lg ml-5"><%= taskData.length %></span>
+                            </h2>
+                        </div>
+                        <ul>
+                            <li>
+                                <button onclick="return taskModel()" class="w-full group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 border">
+                                    <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                        <span class="h-4 w-4 inline-block mr-3 rounded-md mb-[4px]">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </span>
+                                        Add New Task
+                                    </p>
+                                </button>
+                            </li>
+                            <% if(taskData != ""){ for(let tData of taskData){ %>
+                                <li class="border-b hover:rounded-lg trasition-all duration-300">
+                                    <label class="sub flex flex-wrap items-center justify-between hover:bg-gray-300 duration-300 rounded-lg py-2 px-3">
+                                        <div class="w-11/12">
+                                            <div for="<%= tData.taskName %>" class="flex items-center w-[-webkit-fill-available]">
+                                                <input type="checkbox" id="<%= tData.taskName %>">
+                                                <p class="font-medium text-sm text-stone-500 ml-3">
+                                                    <%= tData.taskName %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="w-1/12 text-end">
+                                            <button onclick="return editTaskModel('<%= tData.id %>')" class="rounded-lg trasition-all text-stone-500 duration-500">
+                                                <i class="fa-solid fa-angle-right"></i>
+                                            </button>
+                                        </div>
+                                        <% dd = tData.dueDate.split(/\D/g) %>
+                                        <% let date = [dd[2],dd[1],dd[0]].join("-") %>
+                                        <div class="ml-6">
+                                            <div class="flex items-center">
+                                                <span class="flex items-center">
+                                                    <i class="font-medium text-stone-500 ms-0.5 fa-solid fa-calendar-xmark"></i>
+                                                    <p class="font-medium text-xs text-stone-500 ml-2"><%= date %></p>
+                                                </span>
+                                                <span class="w-[1.5px] h-5 bg-zinc-200 mx-5"></span>
+                                                <span class="flex items-center">
+                                                    <span class="bg-[<%= tData.taskList.listColor %>] h-4 w-4 inline-block rounded-md"></span>
+                                                    <p class="font-medium text-xs text-stone-500 ml-2"><%= tData.taskList.listName %></p>
+                                                </span>
+                                                <span class="w-[2px] h-5 bg-zinc-200 mx-5"></span>
+                                                <span class="flex items-center">
+                                                    <% tData.taskTags.map((v, i)=>{ %>
+                                                        <span class="font-bold text-[13px] bg-[#d1eaed] py-[5px] px-3 rounded-lg ms-2">
+                                                            <p class="font-medium text-xs text-stone-500">
+                                                                <%= v %>
+                                                            </p>
+                                                        </span>
+                                                    <% }) %>
+                                                </span>
+                                                
+                                                
+                                            </div>
+                                        </div>
+                                    </label>
+                                    <!-- <div class=" items-center justify-between hover:bg-gray-300 rounded-lg">
+                                        <span class="ml-6">
+                                            <i class="fa-solid fa-calendar-xmark"></i>
+                                        </span>
+                                    </div> -->
+                                </li>
+                            <% } } else{ %>
+                                <li class="border-b hover:rounded-lg trasition-all duration-300 py-3 text-center">
+                                    <p class="text-3xl text-stone-500">No avaliable task</p>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </section>
+
+                    <section id="task-model" class="relative"></section>
+                </div>
+            </main>
+        </div>
 
         <!-- Javascript -->
         <!-- <script type="javascript" src="/js/script.js"></script> -->
@@ -301,7 +308,45 @@
                         $("#task-model").html(res);
                     }
                 })
-            }
+            };
+
+            let editListModel = (listId) => {
+                document.getElementById("task-model").classList.remove("hidden");
+                document.getElementById("task-model").classList.add("w-[400px]");
+                document.querySelector("main").classList.add("pe-0");
+                document.getElementById("after-flex").classList.add("flex", "justify-between");
+                document.getElementById("main-body").classList.add("w-8/12", "h-screen");
+                $.ajax({
+                    url: "/edit_list_model",
+                    method: "post",
+                    data: {
+                        listId: listId
+                    },
+                    success: (res) => {
+                        $("#task-model").html(res);
+                    }
+                })
+            };
+
+            let confirmDeleteList = (listId) => {
+                let check = confirm("All task will be delete which assign to this list.\nAre you sure you want to delete?")
+                check
+                    ? $.ajax({
+                        url: `/deleteList/?id=${listId}`,
+                        method: "get",
+                    })
+                    : false;
+            };
+
+            let viewTaskOnListFun = (id) => {
+                $.ajax({
+                    url: `/viewTaskOnList/?id=${id}`,
+                    method: "get",
+                    success: (res) => {
+                        $("#ajax-home").html(res);
+                    }
+                })
+            };
 
             let closeModel = () => {
                 document.querySelector("main").classList.remove("pe-0");

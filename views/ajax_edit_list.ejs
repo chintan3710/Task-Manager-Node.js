@@ -1,0 +1,29 @@
+<div class="absolute top-0 left-0 right-0 bottom-0 p-5 bg-[#f4f4f4]">
+    <div class="flex items-center justify-between text-xl">
+        <h2>Edit List:</h2>
+        <button onclick="return closeModel()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+    <form method="post" action="/editList" class="flex flex-col justify-between h-[95%]">
+        <input type="hidden" name="oldId" value="<%= listData.id %>">
+        <div>
+            <div class="mt-5">
+                <label for="list-name" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Enter List Name:</label>
+                <input type="text" name="listName" id="list-name" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" value="<%= listData.listName %>" required>
+            </div>
+            <div class="mt-5">
+                <label for="list-color" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Select List Color:</label>
+                <input type="color" name="listColor" id="list-color" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 px-3 h-[50px] bg-[#ffffff]" value="<%= listData.listColor %>" required>
+            </div>
+        </div>
+        <div class="flex">
+            <div class="w-6/12 mt-5 me-2">
+                <button onclick="return confirmDeleteList('<%= listData.id %>')" type="submit" class="w-full cursor-pointer border text-black font-semibold py-2 px-4 rounded text-center">Delete List</a>
+            </div>
+            <div class="w-6/12 mt-5 ms-2">
+                <input type="submit" class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded" value="Save Changes">
+            </div>
+        </div>
+    </form>
+</div>

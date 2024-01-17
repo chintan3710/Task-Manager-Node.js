@@ -237,7 +237,7 @@ module.exports.viewTaskOnList = async (req, res) => {
             let listData = await List.find({});
             let listId = req.query.id;
             if (taskData) {
-                return res.render("home", {
+                return res.render("ajax_home_list", {
                     taskData: taskData,
                     listData: listData,
                     countTaskData: countTaskData,
@@ -249,6 +249,91 @@ module.exports.viewTaskOnList = async (req, res) => {
             }
         } else {
             console.log("Invalid parameters");
+            return res.redirect("back");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.edit_list_model = async (req, res) => {
+    try {
+        if (req.body) {
+            let listData = await List.findById(req.body.listId);
+            if (listData) {
+                return res.render("ajax_edit_list", {
+                    listData: listData,
+                });
+            } else {
+                console.log("List not found");
+                return res.redirect("back");
+            }
+        } else {
+            console.log("Something went wrong");
+            return res.redirect("back");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.deleteList = async (req, res) => {
+    try {
+        if (req.query.id) {
+            let listData = await List.findById(req.query.id);
+            if (listData) {
+                let deleteTask = await Task.deleteMany({
+                    _id: { $in: listData.taskIds },
+                });
+                if (deleteTask) {
+                    let deleteList = await List.findByIdAndDelete(req.query.id);
+                    if (deleteList) {
+                        return res.redirect("back");
+                    } else {
+                        console.log("List not deleted");
+                        return res.redirect("back");
+                    }
+                } else {
+                    console.log("Task not deleted");
+                    return res.redirect("back");
+                }
+            } else {
+                console.log("Task not found");
+                return res.redirect("back");
+            }
+        } else {
+            console.log("Something went wrong");
+            return res.redirect("back");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.editList = async (req, res) => {
+    try {
+        if (req.body) {
+            let listData = await List.findById(req.body.oldId);
+            if (listData) {
+                let editData = await List.findByIdAndUpdate(
+                    req.body.oldId,
+                    req.body
+                );
+                if (editData) {
+                    return res.redirect("back");
+                } else {
+                    console.log("List not edited");
+                    return res.redirect("back");
+                }
+            } else {
+                console.log("List not found");
+                return res.redirect("back");
+            }
+        } else {
+            console.log("Something went wrong");
             return res.redirect("back");
         }
     } catch (err) {
