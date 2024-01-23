@@ -26,10 +26,10 @@ npm install
 ### Run Server
 
 ```
-npm start
+node index.js
 ```
 
-This will start the server on port 3000. 
+This will start the server on port 8002. 
 
 ## Technologies Used
 
