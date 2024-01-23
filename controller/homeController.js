@@ -4,7 +4,9 @@ const List = require("../models/List");
 
 module.exports.home = async (req, res) => {
     try {
-        let taskData = await Task.find({}).populate("taskList").exec();
+        let taskData = await Task.find({ status: "pending" })
+            .populate("taskList")
+            .exec();
         let listData = await List.find({});
         let countTaskData = await Task.find({}).countDocuments();
         let listId = "";
@@ -37,6 +39,7 @@ module.exports.insertTask = async (req, res) => {
         if (req.body) {
             let listData = await List.findById(req.body.taskList);
             if (listData) {
+                req.body.status = "pending";
                 let taskData = await Task.create(req.body);
                 if (taskData) {
                     listData.taskIds.push(taskData.id);
@@ -335,6 +338,75 @@ module.exports.editList = async (req, res) => {
         } else {
             console.log("Something went wrong");
             return res.redirect("back");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.add_tag_model = async (req, res) => {
+    try {
+        return res.render("ajax_add_tag");
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.deleteMul = async (req, res) => {
+    try {
+        // console.log(req.body);
+        if (req.body) {
+            let taskData = await Task.find({}).populate("taskList").exec();
+            let listData, editListData, pos;
+            if (taskData) {
+                req.body.pos.map(async (v, i) => {
+                    // console.log(taskData[v].taskList.id);
+                    listData = await List.findById(taskData[v].taskList.id);
+                    // console.log(listData);
+                    if (listData) {
+                        pos = parseInt(
+                            listData.taskIds.indexOf(taskData[v].id)
+                        );
+                        // console.log(pos, taskData[v].taskList.id, taskData[v].id);
+                        if (pos >= 0) {
+                            console.log(listData);
+                            listData.taskIds.splice(pos, 1);
+                            // console.log(listData);
+
+                            editListData = await List.findByIdAndUpdate(
+                                taskData[v].taskList.id,
+                                listData
+                            );
+                            console.log(
+                                await List.findById(taskData[v].taskList.id)
+                            );
+                            if (editListData) {
+                                let deleteTask = await Task.findByIdAndDelete(
+                                    taskData[v].id
+                                );
+                                console.log("deleted");
+                            } else {
+                                console.log("List not update");
+                                // return res.redirect("back");
+                            }
+                        } else {
+                            console.log("Invalid List");
+                            // return res.redirect("back");
+                        }
+                    } else {
+                        console.log("List not found");
+                        // return res.redirect("back");
+                    }
+                });
+            } else {
+                console.log("Task not found");
+                // return res.redirect("back");
+            }
+        } else {
+            console.log("Invalid parameters");
+            // return res.redirect("back");
         }
     } catch (err) {
         console.log(err);

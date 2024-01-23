@@ -19,6 +19,10 @@ const taskShema = mongoose.Schema({
     taskTags: {
         type: Array,
     },
+    status: {
+        type: String,
+        required: true,
+    },
 });
 
 const Task = mongoose.model("Task", taskShema);

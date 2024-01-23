@@ -28,4 +28,8 @@ routes.get("/deleteList", homeController.deleteList);
 
 routes.post("/editList", homeController.editList);
 
+routes.get("/add_tag_model", homeController.add_tag_model);
+
+routes.post("/deleteMul", homeController.deleteMul);
+
 module.exports = routes;

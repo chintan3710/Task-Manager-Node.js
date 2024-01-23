@@ -135,19 +135,14 @@
                         <p class="text-xs font-medium my-2">Tags</p>
                         <ul class="pb-5 flex flex-wrap">
                             <li class="mr-1">
-                                <a href="" class="group font-bold text-[13px] bg-[#d1eaed] py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
+                                <button href="" class="group font-bold text-[13px] bg-[#d1eaed] py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
                                     Tag 1
-                                </a>
+                                </button>
                             </li>
                             <li class="mr-1">
-                                <a href="" class="group font-bold text-[13px] bg-[#ffdada] py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
-                                    Tag 2
-                                </a>
-                            </li>
-                            <li class="mr-1">
-                                <a href="" class="group font-bold text-[13px] bg-[#ebebeb] py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
+                                <button onclick="return tagModel()" class="group font-bold text-[13px] bg-[#ebebeb] py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
                                     + Add Tag
-                                </a>
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -179,78 +174,122 @@
                 <div id="after-flex">
                     <section id="main-body">
                         <div class="pt-3 pb-8">
-                            <h2 class="text-4xl font-bold">
-                                Today
-                                <span class="border font-semibold inline-block h-[45px] w-[45px] text-center leading-[45px] rounded-lg ml-5"><%= taskData.length %></span>
-                            </h2>
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-4xl font-bold">
+                                    Today
+                                    <span class="border font-semibold inline-block h-[45px] w-[45px] text-center leading-[45px] rounded-lg ml-5"><%= taskData.length %></span>
+                                </h2>
+                                <!-- <div class="mt-5"> -->
+                                    <!-- <span class="border px-3 py-2 rounded-lg">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </span> -->
+                                    <!-- <label for="task-list" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Assign To List:</label> -->
+                                    <!-- <select name="actionTask" class=" rounded-md border-0 outline-none shadow-lg ml-3 py-2
+                                     pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" id="action-task">
+                                        <option value="" disabled="" selected="">Action for task</option>                                        
+                                        <option value="">Delete</option>
+                                        <option value="">Complete</option>
+                                    </select> -->
+                                        <!-- <button  class="group font-bold  py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
+                                            <i class="fa-solid fa-check"></i>
+                                        </button> -->
+                                <!-- </div> -->
+                            </div>
                         </div>
-                        <ul>
-                            <li>
-                                <button onclick="return taskModel()" class="w-full group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 border">
-                                    <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
-                                        <span class="h-4 w-4 inline-block mr-3 rounded-md mb-[4px]">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </span>
-                                        Add New Task
-                                    </p>
-                                </button>
-                            </li>
-                            <% if(taskData != ""){ for(let tData of taskData){ %>
-                                <li class="border-b hover:rounded-lg trasition-all duration-300">
-                                    <label class="sub flex flex-wrap items-center justify-between hover:bg-gray-300 duration-300 rounded-lg py-2 px-3">
-                                        <div class="w-11/12">
-                                            <div for="<%= tData.taskName %>" class="flex items-center w-[-webkit-fill-available]">
-                                                <input type="checkbox" id="<%= tData.taskName %>">
-                                                <p class="font-medium text-sm text-stone-500 ml-3">
-                                                    <%= tData.taskName %>
-                                                </p>
+                        <!-- <form action="/actionTask" method="post"> -->
+                            <ul>
+                                <li>
+                                    <div class="w-full flex items-center py-2 px-3 rounded-lg border">
+                                        <label class="sub flex flex-wrap items-center justify-between rounded-lg ">
+                                            <input type="checkbox" id="selectAll">
+                                        </label>
+                                        <button onclick="return deleteTaskMul()" class="text-stone-500 relative group mx-3">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                            <span class="absolute top-full left-1/2 -translate-x-1/2 bg-zinc-400 py-1 px-2 rounded-lg text-white invisible group-hover:visible before:absolute before:left-1/2 before:-translate-x-1/2 before:top-[-6px] before:w-0 before:h-0 before:border-solid before:border-t-0 before:border-r-[10px] before:border-b-[10px] before:border-l-[10px] before:border-transparent before:border-b-zinc-400">Delete</span>
+                                        </button>
+                                        <button class="text-stone-500 relative group">
+                                            <i class="fa-solid fa-check"></i>
+                                            <span class="absolute top-full left-1/2 -translate-x-1/2 bg-zinc-400 py-1 px-2 rounded-lg text-white invisible group-hover:visible before:absolute before:left-1/2 before:-translate-x-1/2 before:top-[-6px] before:w-0 before:h-0 before:border-solid before:border-t-0 before:border-r-[10px] before:border-b-[10px] before:border-l-[10px] before:border-transparent before:border-b-zinc-400">Complete</span>
+                                        </button>
+                                        <!-- <div class="group relative">
+                                            <button class="px-4 py-2 bg-blue-500 text-white rounded">Hover me</button>
+                                            <div class="absolute invisible group-hover:visible p-2 bg-gray-200 rounded shadow-md top-full left-1/2 -translate-x-1/2">
+                                            This is the tooltip content.
                                             </div>
-                                        </div>
-                                        <div class="w-1/12 text-end">
-                                            <button onclick="return editTaskModel('<%= tData.id %>')" class="rounded-lg trasition-all text-stone-500 duration-500">
-                                                <i class="fa-solid fa-angle-right"></i>
-                                            </button>
-                                        </div>
-                                        <% dd = tData.dueDate.split(/\D/g) %>
-                                        <% let date = [dd[2],dd[1],dd[0]].join("-") %>
-                                        <div class="ml-6">
-                                            <div class="flex items-center">
-                                                <span class="flex items-center">
-                                                    <i class="font-medium text-stone-500 ms-0.5 fa-solid fa-calendar-xmark"></i>
-                                                    <p class="font-medium text-xs text-stone-500 ml-2"><%= date %></p>
-                                                </span>
-                                                <span class="w-[1.5px] h-5 bg-zinc-200 mx-5"></span>
-                                                <span class="flex items-center">
-                                                    <span class="bg-[<%= tData.taskList.listColor %>] h-4 w-4 inline-block rounded-md"></span>
-                                                    <p class="font-medium text-xs text-stone-500 ml-2"><%= tData.taskList.listName %></p>
-                                                </span>
-                                                <span class="w-[2px] h-5 bg-zinc-200 mx-5"></span>
-                                                <span class="flex items-center">
-                                                    <% tData.taskTags.map((v, i)=>{ %>
-                                                        <span class="font-bold text-[13px] bg-[#d1eaed] py-[5px] px-3 rounded-lg ms-2">
-                                                            <p class="font-medium text-xs text-stone-500">
-                                                                <%= v %>
-                                                            </p>
-                                                        </span>
-                                                    <% }) %>
-                                                </span>
-                                                
-                                                
+                                        </div> -->
+                                        <!-- <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                            <span class="h-4 w-4 inline-block mr-3 rounded-md mb-[4px]">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </span>
+                                            Add New Task
+                                        </p> -->
+                                    </div>
+                                </li>
+                                <% if(taskData != ""){ for(let tData of taskData){ %>
+                                    <li class="border-b hover:rounded-lg trasition-all duration-300">
+                                        <label class="sub flex flex-wrap items-center justify-between hover:bg-gray-300 duration-300 rounded-lg py-2 px-3">
+                                            <div class="w-11/12">
+                                                <div for="<%= tData.taskName %>" class="flex items-center w-[-webkit-fill-available]">
+                                                    <input type="checkbox" id="<%= tData.taskName %>" class="checkboxSub">
+                                                    <p class="font-medium text-sm text-stone-500 ml-3">
+                                                        <%= tData.taskName %>
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </label>
-                                    <!-- <div class=" items-center justify-between hover:bg-gray-300 rounded-lg">
-                                        <span class="ml-6">
-                                            <i class="fa-solid fa-calendar-xmark"></i>
-                                        </span>
-                                    </div> -->
+                                            <div class="w-1/12 text-end">
+                                                <button onclick="return editTaskModel('<%= tData.id %>')" class="rounded-lg trasition-all text-stone-500 duration-500">
+                                                    <i class="fa-solid fa-angle-right"></i>
+                                                </button>
+                                            </div>
+                                            <% dd = tData.dueDate.split(/\D/g) %>
+                                            <% let date = [dd[2],dd[1],dd[0]].join("-") %>
+                                            <div class="ml-6">
+                                                <div class="flex items-center">
+                                                    <span class="flex items-center">
+                                                        <i class="font-medium text-stone-500 ms-0.5 fa-solid fa-calendar-xmark"></i>
+                                                        <p class="font-medium text-xs text-stone-500 ml-2"><%= date %></p>
+                                                    </span>
+                                                    <span class="w-[1.5px] h-5 bg-zinc-200 mx-5"></span>
+                                                    <span class="flex items-center">
+                                                        <span class="bg-[<%= tData.taskList.listColor %>] h-4 w-4 inline-block rounded-md"></span>
+                                                        <p class="font-medium text-xs text-stone-500 ml-2"><%= tData.taskList.listName %></p>
+                                                    </span>
+                                                    <span class="w-[2px] h-5 bg-zinc-200 mx-5"></span>
+                                                    <span class="flex items-center">
+                                                        <% tData.taskTags.map((v, i)=>{ %>
+                                                            <span class="font-bold text-[13px] bg-[#d1eaed] py-[5px] px-3 rounded-lg ms-2">
+                                                                <p class="font-medium text-xs text-stone-500">
+                                                                    <%= v %>
+                                                                </p>
+                                                            </span>
+                                                        <% }) %>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <!-- <div class=" items-center justify-between hover:bg-gray-300 rounded-lg">
+                                            <span class="ml-6">
+                                                <i class="fa-solid fa-calendar-xmark"></i>
+                                            </span>
+                                        </div> -->
+                                    </li>
+                                <% } } else{ %>
+                                    <li class="border-b hover:rounded-lg trasition-all duration-300 py-3 text-center">
+                                        <p class="text-3xl text-stone-500">No avaliable task</p>
+                                    </li>
+                                <% } %>
+                                <li>
+                                    <button onclick="return taskModel()" class="w-full group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
+                                        <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                            <span class="h-4 w-4 inline-block mr-3 rounded-md mb-[4px]">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </span>
+                                            Add New Task
+                                        </p>
+                                    </button>
                                 </li>
-                            <% } } else{ %>
-                                <li class="border-b hover:rounded-lg trasition-all duration-300 py-3 text-center">
-                                    <p class="text-3xl text-stone-500">No avaliable task</p>
-                                </li>
-                            <% } %>
-                        </ul>
+                            </ul>
+                        <!-- </form> -->
                     </section>
 
                     <section id="task-model" class="relative"></section>
@@ -348,12 +387,53 @@
                 })
             };
 
+            let tagModel = () => {
+                document.getElementById("task-model").classList.remove("hidden");
+                document.getElementById("task-model").classList.add("w-[400px]");
+                document.querySelector("main").classList.add("pe-0");
+                document.getElementById("after-flex").classList.add("flex", "justify-between");
+                document.getElementById("main-body").classList.add("w-8/12", "h-screen");
+                $.ajax({
+                    url: "/add_tag_model",
+                    method: "get",
+                    success: (res) => {
+                        $("#task-model").html(res);
+                    }
+                })
+            };
+
+            let deleteTaskMul = () => {
+                let checkboxSel = document.querySelectorAll(".checkboxSub");
+                let pos = [];
+                checkboxSel.forEach((v, i) => {
+                    if(v.checked){
+                        pos.push(i)
+                    }
+                });
+                $.ajax({
+                    url: "/deleteMul",
+                    method: "post",
+                    data: {
+                        pos: pos,
+                    },
+                    success: (res) => {
+                        // $("#task-model").html(res);
+                    }
+                });
+            };
+
             let closeModel = () => {
                 document.querySelector("main").classList.remove("pe-0");
                 document.getElementById("main-body").classList.remove("w-8/12");
                 document.getElementById("main-body").classList.add("w-full");
                 document.getElementById("task-model").classList.add("hidden");
             };
+
+            $(document).ready(function () {
+                $("#selectAll").click(function () {
+                    $(".checkboxSub").attr('checked', this.checked);
+                });
+            });
         </script>
     </body>
 </html>
