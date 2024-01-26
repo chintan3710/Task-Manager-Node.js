@@ -1,10 +1,27 @@
 const express = require("express");
 
+const Passport = require("passport");
+
 const homeController = require("../controller/homeController");
 
 const routes = express();
 
-routes.get("/", homeController.home);
+routes.get("/", async (req, res) => {
+    let data = res.locals.user;
+    if (data) {
+        return res.redirect("/home");
+    } else {
+        return res.render("sign_in");
+    }
+});
+
+routes.get("/home", Passport.checkAuth, homeController.home);
+
+routes.post(
+    "/signInUser",
+    Passport.authenticate("userLogin", { failureRedirect: "/" }),
+    homeController.signInUser
+);
 
 routes.get("/add_task_model", homeController.add_task_model);
 

@@ -2,20 +2,45 @@ const Task = require("../models/Task");
 
 const List = require("../models/List");
 
+const User = require("../models/User");
+
 module.exports.home = async (req, res) => {
     try {
-        let taskData = await Task.find({ status: "pending" })
-            .populate("taskList")
-            .exec();
-        let listData = await List.find({});
-        let countTaskData = await Task.find({}).countDocuments();
-        let listId = "";
-        return res.render("home", {
-            taskData: taskData,
-            listData: listData,
-            countTaskData: countTaskData,
-            listId: listId,
-        });
+        if (req.isAuthenticated()) {
+            let taskData = await Task.find({ status: "pending" })
+                .populate("taskList")
+                .exec();
+            let listData = await List.find({});
+            let countTaskData = await Task.find({}).countDocuments();
+            let listId = "";
+            return res.render("home", {
+                taskData: taskData,
+                listData: listData,
+                countTaskData: countTaskData,
+                listId: listId,
+            });
+        } else {
+            return res.redirect("/");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+// module.exports.sign_in = async (req, res) => {
+//     try {
+//         console.log("login Page");
+//         return res.render("sign_in");
+//     } catch (err) {
+//         console.log(err);
+//         return res.redirect("back");
+//     }
+// };
+
+module.exports.signInUser = async (req, res) => {
+    try {
+        return res.redirect("/");
     } catch (err) {
         console.log(err);
         return res.redirect("back");

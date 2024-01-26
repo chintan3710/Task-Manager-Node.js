@@ -4,6 +4,14 @@ const path = require("path");
 
 const mongoose = require("mongoose");
 
+const Passport = require("passport");
+
+const cookieParser = require("cookie-parser");
+
+const session = require("express-session");
+
+const PassportLocal = require("./config/passport-local-strategy");
+
 require("dotenv").config();
 
 mongoose
@@ -21,6 +29,26 @@ const app = express();
 app.set("view engine", "ejs");
 
 app.set("views", path.join(__dirname, "views"));
+
+app.use(
+    session({
+        name: "taskManager",
+        secret: "taskManager",
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 1000 * 60 * 100,
+        },
+    })
+);
+
+app.use(Passport.initialize());
+
+app.use(Passport.session());
+
+app.use(Passport.setAuth);
+
+app.use(cookieParser());
 
 app.use(express.urlencoded());
 
