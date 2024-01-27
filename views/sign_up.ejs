@@ -19,11 +19,12 @@
             </div>
             <div class="w-[600px] h-screen p-5">
                 <div class="border w-full h-full rounded-lg px-[100px] py-[150px]">
-                    <h2 class="text-4xl font-bold mb-5">Sign in</h2>
-                    <form method="post" action="/signInUser">
-                        <input type="text" name="email" class="w-full rounded-md outline-none shadow-sm border pl-2 py-2 sm:text-sm sm:leading-6 font-medium" value="chintanrajpara34@gmail.com" />
+                    <h2 class="text-4xl font-bold mb-5">Sign up</h2>
+                    <form method="post" action="/signUpUser">
+                        <label for="email" class="block text-sm font-medium leading-6 text-gray-600">Enter Email:</label>
+                        <input type="text" id="email" name="email" class="w-full rounded-md outline-none shadow-sm border ml-4 mt-2 pl-2 py-2 sm:text-sm sm:leading-6 font-medium" placeholder="Enter email"/>
                         <div class="relative mt-3 mb-7">
-                            <input type="password" name="password" id="password" class="w-full rounded-md outline-none shadow-sm border pl-2 py-2 sm:text-sm sm:leading-6 font-medium" value="12345" />
+                            <input type="password" name="password" id="password" class="w-full rounded-md outline-none shadow-sm border pl-2 py-2 sm:text-sm sm:leading-6 font-medium" placeholder="Enter password" />
                             <button type="button" onclick="displayPassword()" class="absolute top-1/2 -translate-y-1/2 right-0 mr-2 cursor-pointer">
                                 <i class="fa-regular fa-eye"></i>
                             </button>

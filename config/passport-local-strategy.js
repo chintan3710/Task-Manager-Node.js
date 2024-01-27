@@ -12,7 +12,6 @@ passport.use(
         },
         async (email, password, done) => {
             let userData = await User.findOne({ email: email });
-            // console.log(email, password);
             if (userData) {
                 if (userData.password == password) {
                     return done(null, userData);

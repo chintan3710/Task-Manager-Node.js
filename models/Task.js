@@ -19,6 +19,11 @@ const taskShema = mongoose.Schema({
     taskTags: {
         type: Array,
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
     status: {
         type: String,
         required: true,

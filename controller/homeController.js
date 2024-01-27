@@ -7,11 +7,16 @@ const User = require("../models/User");
 module.exports.home = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            let taskData = await Task.find({ status: "pending" })
+            let taskData = await Task.find({
+                userId: res.locals.user._id,
+                status: "pending",
+            })
                 .populate("taskList")
                 .exec();
-            let listData = await List.find({});
-            let countTaskData = await Task.find({}).countDocuments();
+            let listData = await List.find({ userId: res.locals.user._id });
+            let countTaskData = await Task.find({
+                userId: res.locals.user._id,
+            }).countDocuments();
             let listId = "";
             return res.render("home", {
                 taskData: taskData,
@@ -28,16 +33,6 @@ module.exports.home = async (req, res) => {
     }
 };
 
-// module.exports.sign_in = async (req, res) => {
-//     try {
-//         console.log("login Page");
-//         return res.render("sign_in");
-//     } catch (err) {
-//         console.log(err);
-//         return res.redirect("back");
-//     }
-// };
-
 module.exports.signInUser = async (req, res) => {
     try {
         return res.redirect("/");
@@ -47,9 +42,28 @@ module.exports.signInUser = async (req, res) => {
     }
 };
 
+module.exports.logoutUser = async (req, res) => {
+    try {
+        res.clearCookie("taskManager");
+        return res.redirect("/");
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.sign_up = async (req, res) => {
+    try {
+        return res.render("sign_up");
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
 module.exports.add_task_model = async (req, res) => {
     try {
-        let listData = await List.find({});
+        let listData = await List.find({ userId: res.locals.user._id });
         return res.render("ajax_add_task", {
             listData: listData,
         });
@@ -65,6 +79,7 @@ module.exports.insertTask = async (req, res) => {
             let listData = await List.findById(req.body.taskList);
             if (listData) {
                 req.body.status = "pending";
+                req.body.userId = res.locals.user._id;
                 let taskData = await Task.create(req.body);
                 if (taskData) {
                     listData.taskIds.push(taskData.id);
@@ -238,6 +253,7 @@ module.exports.insertList = async (req, res) => {
     try {
         if (req.body) {
             req.body.taskIds = [];
+            req.body.userId = res.locals.user._id;
             let listData = await List.create(req.body);
             if (listData) {
                 return res.redirect("back");

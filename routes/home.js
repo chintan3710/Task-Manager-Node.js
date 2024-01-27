@@ -23,6 +23,10 @@ routes.post(
     homeController.signInUser
 );
 
+routes.get("/sign_up", homeController.sign_up);
+
+routes.get("/logoutUser", homeController.logoutUser);
+
 routes.get("/add_task_model", homeController.add_task_model);
 
 routes.post("/insertTask", homeController.insertTask);
