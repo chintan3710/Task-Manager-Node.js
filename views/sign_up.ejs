@@ -18,18 +18,28 @@
                 <img src="/img/sign-in.jpg" alt="sign-in" class="w-full h-full object-cover rounded-lg" />
             </div>
             <div class="w-[600px] h-screen p-5">
-                <div class="border w-full h-full rounded-lg px-[100px] py-[150px]">
+                <div class="border w-full h-full rounded-lg px-[100px] py-[50px]">
                     <h2 class="text-4xl font-bold mb-5">Sign up</h2>
                     <form method="post" action="/signUpUser">
-                        <label for="email" class="block text-sm font-medium leading-6 text-gray-600">Enter Email:</label>
-                        <input type="text" id="email" name="email" class="w-full rounded-md outline-none shadow-sm border ml-4 mt-2 pl-2 py-2 sm:text-sm sm:leading-6 font-medium" placeholder="Enter email"/>
-                        <div class="relative mt-3 mb-7">
-                            <input type="password" name="password" id="password" class="w-full rounded-md outline-none shadow-sm border pl-2 py-2 sm:text-sm sm:leading-6 font-medium" placeholder="Enter password" />
+                        <label for="name" class="block text-sm font-medium leading-6 text-gray-600 ">Enter Full Name:</label>
+                        <input type="text" id="name" name="name" class="w-full rounded-md outline-none shadow-sm border my-2 pl-2 py-2 sm:text-sm sm:leading-6 font-medium" placeholder="Enter Full Name"/>
+                        <label for="email" class="block text-sm font-medium leading-6 text-gray-600 ">Enter Email:</label>
+                        <input type="email" id="email" name="email" class="w-full rounded-md outline-none shadow-sm border my-2 pl-2 py-2 sm:text-sm sm:leading-6 font-medium" placeholder="Enter email"/>
+                        <label for="password" class="block text-sm font-medium leading-6 text-gray-600 ">Enter password:</label>
+                        <div class="relative">
+                            <input type="password" id="password" name="password" class="w-full rounded-md outline-none shadow-sm border my-2 pl-2 py-2 sm:text-sm sm:leading-6 font-medium" placeholder="Enter password"/>
                             <button type="button" onclick="displayPassword()" class="absolute top-1/2 -translate-y-1/2 right-0 mr-2 cursor-pointer">
                                 <i class="fa-regular fa-eye"></i>
                             </button>
                         </div>
-                        <button type="submit" class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded">Sign in</button>
+                        <label for="cpassword" class="block text-sm font-medium leading-6 text-gray-600 ">Confirm password:</label>
+                        <div class="relative">
+                            <input type="password" id="cpassword" name="cPassword" class="w-full rounded-md outline-none shadow-sm border my-2 pl-2 py-2 sm:text-sm sm:leading-6 font-medium" placeholder="Re-enter password"/>
+                            <button type="button" onclick="displayConfirmPassword()" class="absolute top-1/2 -translate-y-1/2 right-0 mr-2 cursor-pointer">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                        <button type="submit" class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded mt-5">Sign up</button>
                     </form>
                     <div class="flex items-center my-5">
                         <span class="inline-block h-0.5 w-1/2 bg-[#ebebeb] rounded-lg"></span>
@@ -44,7 +54,7 @@
                             Facebook
                         </a>
                     </div>
-                    <p class="font-medium text-center mt-5">Don't have account? <a href="/sign_up" class="text-[#ffd43b]">Sign up</a></p>
+                    <p class="font-medium text-center mt-5">Already have account? <a href="/" class="text-[#ffd43b]">Sign in</a></p>
                 </div>
             </div>
         </div>
@@ -59,6 +69,18 @@
                 else {
                     document.getElementById("password").type = "password";
                     temp = true;
+                }
+            };
+
+            let ctemp = true;
+            let displayConfirmPassword = () => {
+                if(ctemp){
+                    document.getElementById("cpassword").type = "text";
+                    ctemp = false;
+                }
+                else {
+                    document.getElementById("cpassword").type = "password";
+                    ctemp = true;
                 }
             };
         </script>

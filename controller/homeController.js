@@ -54,7 +54,42 @@ module.exports.logoutUser = async (req, res) => {
 
 module.exports.sign_up = async (req, res) => {
     try {
-        return res.render("sign_up");
+        if (req.isAuthenticated()) {
+            return res.redirect("/");
+        } else {
+            return res.render("sign_up");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.signUpUser = async (req, res) => {
+    try {
+        if (req.body) {
+            let checkData = await User.find({ email: req.body.email });
+            if (!checkData) {
+                if (req.body.password == req.body.cPassword) {
+                    let userData = await User.create(req.body);
+                    if (userData) {
+                        return res.redirect("back");
+                    } else {
+                        console.log("User not registerd");
+                        return res.redirect("back");
+                    }
+                } else {
+                    console.log("Password not match");
+                    return res.redirect("back");
+                }
+            } else {
+                console.log("Email already exist");
+                return res.redirect("back");
+            }
+        } else {
+            console.log("Something went wrong");
+            return res.redirect("back");
+        }
     } catch (err) {
         console.log(err);
         return res.redirect("back");
