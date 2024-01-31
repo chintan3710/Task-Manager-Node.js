@@ -29,6 +29,19 @@ routes.get("/logoutUser", homeController.logoutUser);
 
 routes.post("/signUpUser", homeController.signUpUser);
 
+routes.get(
+    "/google",
+    Passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+routes.get(
+    "/google/callback",
+    Passport.authenticate("google", {
+        failureRedirect: "/",
+        successRedirect: "/home",
+    })
+);
+
 routes.get("/add_task_model", homeController.add_task_model);
 
 routes.post("/insertTask", homeController.insertTask);

@@ -8,11 +8,13 @@ const Passport = require("passport");
 
 const cookieParser = require("cookie-parser");
 
+require("dotenv").config();
 const session = require("express-session");
 
 const PassportLocal = require("./config/passport-local-strategy");
 
-require("dotenv").config();
+const GoogleStrategy = require("./config/google-strategy");
+
 
 mongoose
     .connect(process.env.MONGO_URL, {

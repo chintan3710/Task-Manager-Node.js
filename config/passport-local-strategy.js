@@ -4,6 +4,8 @@ const PassportLocal = require("passport-local").Strategy;
 
 const User = require("../models/User");
 
+const bcrypt = require("bcrypt");
+
 passport.use(
     "userLogin",
     new PassportLocal(
@@ -13,7 +15,7 @@ passport.use(
         async (email, password, done) => {
             let userData = await User.findOne({ email: email });
             if (userData) {
-                if (userData.password == password) {
+                if (await bcrypt.compare(password, userData.password)) {
                     return done(null, userData);
                 } else {
                     return done(null, false);

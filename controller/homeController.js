@@ -4,6 +4,8 @@ const List = require("../models/List");
 
 const User = require("../models/User");
 
+const bcrypt = require("bcrypt");
+
 module.exports.home = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
@@ -35,7 +37,7 @@ module.exports.home = async (req, res) => {
 
 module.exports.signInUser = async (req, res) => {
     try {
-        return res.redirect("/");
+        return res.redirect("/home");
     } catch (err) {
         console.log(err);
         return res.redirect("back");
@@ -71,6 +73,10 @@ module.exports.signUpUser = async (req, res) => {
             let checkData = await User.find({ email: req.body.email });
             if (!checkData) {
                 if (req.body.password == req.body.cPassword) {
+                    req.body.password = await bcrypt.hash(
+                        req.body.password,
+                        10
+                    );
                     let userData = await User.create(req.body);
                     if (userData) {
                         return res.redirect("back");
