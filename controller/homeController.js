@@ -71,7 +71,7 @@ module.exports.signUpUser = async (req, res) => {
     try {
         if (req.body) {
             let checkData = await User.find({ email: req.body.email });
-            if (!checkData) {
+            if (checkData != null) {
                 if (req.body.password == req.body.cPassword) {
                     req.body.password = await bcrypt.hash(
                         req.body.password,
@@ -79,7 +79,7 @@ module.exports.signUpUser = async (req, res) => {
                     );
                     let userData = await User.create(req.body);
                     if (userData) {
-                        return res.redirect("back");
+                        return res.redirect("/");
                     } else {
                         console.log("User not registerd");
                         return res.redirect("back");

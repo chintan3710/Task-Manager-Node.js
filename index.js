@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 
 const path = require("path");
@@ -8,13 +10,13 @@ const Passport = require("passport");
 
 const cookieParser = require("cookie-parser");
 
-require("dotenv").config();
 const session = require("express-session");
 
 const PassportLocal = require("./config/passport-local-strategy");
 
 const GoogleStrategy = require("./config/google-strategy");
 
+const GithubStrategy = require("./config/github-strategy");
 
 mongoose
     .connect(process.env.MONGO_URL, {

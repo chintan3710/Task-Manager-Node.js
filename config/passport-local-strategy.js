@@ -4,6 +4,8 @@ const PassportLocal = require("passport-local").Strategy;
 
 const User = require("../models/User");
 
+const UserGithub = require("../models/UserGithub");
+
 const bcrypt = require("bcrypt");
 
 passport.use(
@@ -36,7 +38,12 @@ passport.deserializeUser(async (id, done) => {
     if (userRecord) {
         return done(null, userRecord);
     } else {
-        return done(null, false);
+        userRecord = await UserGithub.findById(id);
+        if (userRecord) {
+            return done(null, userRecord);
+        } else {
+            return done(null, false);
+        }
     }
 });
 

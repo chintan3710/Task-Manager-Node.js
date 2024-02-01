@@ -7,6 +7,7 @@ const homeController = require("../controller/homeController");
 const routes = express();
 
 routes.get("/", async (req, res) => {
+    // console.log(res.locals.user);
     let data = res.locals.user;
     if (data) {
         return res.redirect("/home");
@@ -37,6 +38,16 @@ routes.get(
 routes.get(
     "/google/callback",
     Passport.authenticate("google", {
+        failureRedirect: "/",
+        successRedirect: "/home",
+    })
+);
+
+routes.get("/github", Passport.authenticate("github", { scope: ["profile"] }));
+
+routes.get(
+    "/github/callback",
+    Passport.authenticate("github", {
         failureRedirect: "/",
         successRedirect: "/home",
     })
