@@ -79,6 +79,8 @@ routes.get("/add_tag_model", homeController.add_tag_model);
 
 routes.post("/insertTag", homeController.insertTag);
 
+routes.get("/viewTaskOnTag", homeController.viewTaskOnTag);
+
 routes.post("/deleteMul", homeController.deleteMul);
 
 module.exports = routes;

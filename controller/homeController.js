@@ -92,7 +92,7 @@ module.exports.signUpUser = async (req, res) => {
                             secure: true,
                             auth: {
                                 user: "yom.no.replay@gmail.com",
-                                pass: "jwegjnjfgksdxoqg",
+                                pass: process.env.NODE_MAILER_PASS,
                             },
                         });
                         const info = await transporter.sendMail({
@@ -499,6 +499,15 @@ module.exports.insertTag = async (req, res) => {
         }
     } catch (err) {
         console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.viewTaskOnTag = async (req, res) => {
+    if (req.query) {
+        let taskData = await Task.find;
+    } else {
+        console.log("Invalid parameters");
         return res.redirect("back");
     }
 };

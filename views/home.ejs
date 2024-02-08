@@ -208,6 +208,7 @@
                             <% for(let tData of tagData){ %>
                             <li class="mr-1">
                                 <button
+                                    onclick="return viewTaskOnTagFun('<%= tData.id %>')"
                                     class="group font-bold text-[13px] bg-[#d1eaed] text-stone-500 py-[5px] px-3 rounded-lg trasition-all duration-500 mb-2"
                                 >
                                     <%= tData.tagName %>
@@ -627,6 +628,16 @@
                     },
                     success: (res) => {
                         // $("#task-model").html(res);
+                    },
+                });
+            };
+
+            let viewTaskOnTagFun = (id) => {
+                $.ajax({
+                    url: `/viewTaskOnTag/?id=${id}`,
+                    method: "get",
+                    success: (res) => {
+                        $("#ajax-home").html(res);
                     },
                 });
             };
