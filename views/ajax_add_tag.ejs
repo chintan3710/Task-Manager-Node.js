@@ -5,19 +5,34 @@
             <i class="fa-solid fa-xmark"></i>
         </button>
     </div>
-    <form method="post" action="/insertList" class="flex flex-col justify-between h-[95%]">
+    <form
+        method="post"
+        action="/insertTag"
+        class="flex flex-col justify-between h-[95%]"
+    >
         <div>
             <div class="mt-5">
-                <label for="list-name" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Enter List Name:</label>
-                <input type="text" name="listName" id="list-name" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" placeholder="e.g. Personal" required>
-            </div>
-            <div class="mt-5">
-                <label for="list-color" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Select List Color:</label>
-                <input type="color" name="listColor" id="list-color" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 px-3 h-[50px] bg-[#ffffff]" placeholder="e.g. Personal" required>
+                <label
+                    for="tag-name"
+                    class="block text-sm font-medium leading-6 text-gray-600 mb-2"
+                    >Enter Tag Name:</label
+                >
+                <input
+                    type="text"
+                    name="tagName"
+                    id="tag-name"
+                    class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                    placeholder="e.g. Personal"
+                    required
+                />
             </div>
         </div>
         <div class="mt-5">
-            <input type="submit" class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded" value="Submit">
+            <input
+                type="submit"
+                class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded"
+                value="Submit"
+            />
         </div>
     </form>
 </div>

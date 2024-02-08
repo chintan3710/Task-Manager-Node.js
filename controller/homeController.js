@@ -4,7 +4,11 @@ const List = require("../models/List");
 
 const User = require("../models/User");
 
+const Tag = require("../models/Tag");
+
 const bcrypt = require("bcrypt");
+
+const nodemailer = require("nodemailer");
 
 module.exports.home = async (req, res) => {
     try {
@@ -16,6 +20,7 @@ module.exports.home = async (req, res) => {
                 .populate("taskList")
                 .exec();
             let listData = await List.find({ userId: res.locals.user._id });
+            let tagData = await Tag.find({ userId: res.locals.user._id });
             let countTaskData = await Task.find({
                 userId: res.locals.user._id,
             }).countDocuments();
@@ -23,6 +28,7 @@ module.exports.home = async (req, res) => {
             return res.render("home", {
                 taskData: taskData,
                 listData: listData,
+                tagData: tagData,
                 countTaskData: countTaskData,
                 listId: listId,
             });
@@ -73,12 +79,29 @@ module.exports.signUpUser = async (req, res) => {
             let checkData = await User.find({ email: req.body.email });
             if (checkData != null) {
                 if (req.body.password == req.body.cPassword) {
+                    let mailPass = req.body.password;
                     req.body.password = await bcrypt.hash(
                         req.body.password,
                         10
                     );
                     let userData = await User.create(req.body);
                     if (userData) {
+                        const transporter = nodemailer.createTransport({
+                            host: "smtp.gmail.com",
+                            port: 465,
+                            secure: true,
+                            auth: {
+                                user: "yom.no.replay@gmail.com",
+                                pass: "jwegjnjfgksdxoqg",
+                            },
+                        });
+                        const info = await transporter.sendMail({
+                            from: "yom.no.replay@gmail.com",
+                            to: req.body.email,
+                            subject: "Sent Pass",
+                            text: "Your password is here!",
+                            html: `<b>${mailPass}</b>`,
+                        });
                         return res.redirect("/");
                     } else {
                         console.log("User not registerd");
@@ -105,8 +128,10 @@ module.exports.signUpUser = async (req, res) => {
 module.exports.add_task_model = async (req, res) => {
     try {
         let listData = await List.find({ userId: res.locals.user._id });
+        let tagData = await Tag.find({ userId: res.locals.user._id });
         return res.render("ajax_add_task", {
             listData: listData,
+            tagData: tagData,
         });
     } catch (err) {
         console.log(err);
@@ -117,7 +142,12 @@ module.exports.add_task_model = async (req, res) => {
 module.exports.insertTask = async (req, res) => {
     try {
         if (req.body) {
+            let tagData = [];
+            req.body.taskTags.map(async (v, i) => {
+                tagData.push(await Tag.findById(v));
+            });
             let listData = await List.findById(req.body.taskList);
+
             if (listData) {
                 req.body.status = "pending";
                 req.body.userId = res.locals.user._id;
@@ -128,6 +158,14 @@ module.exports.insertTask = async (req, res) => {
                         req.body.taskList,
                         listData
                     );
+                    let editTagData;
+                    tagData.map(async (v, i) => {
+                        v.taskIds.push(taskData.id);
+                        editTagData = await Tag.findByIdAndUpdate(v.id, v);
+                    });
+                    setTimeout(() => {
+                        console.log(tagData);
+                    }, 1000);
                     if (editListData) {
                         return res.redirect("back");
                     } else {
@@ -315,16 +353,23 @@ module.exports.insertList = async (req, res) => {
 module.exports.viewTaskOnList = async (req, res) => {
     try {
         if (req.query) {
-            let taskData = await Task.find({ taskList: req.query.id })
+            let taskData = await Task.find({
+                userId: res.locals.user._id,
+                taskList: req.query.id,
+            })
                 .populate("taskList")
                 .exec();
-            let countTaskData = await Task.find({}).countDocuments();
-            let listData = await List.find({});
+            let countTaskData = await Task.find({
+                userId: res.locals.user._id,
+            }).countDocuments();
+            let listData = await List.find({ userId: res.locals.user._id });
+            let tagData = await Tag.find({ userId: res.locals.user._id });
             let listId = req.query.id;
             if (taskData) {
                 return res.render("ajax_home_list", {
                     taskData: taskData,
                     listData: listData,
+                    tagData: tagData,
                     countTaskData: countTaskData,
                     listId: listId,
                 });
@@ -430,6 +475,28 @@ module.exports.editList = async (req, res) => {
 module.exports.add_tag_model = async (req, res) => {
     try {
         return res.render("ajax_add_tag");
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.insertTag = async (req, res) => {
+    try {
+        if (req.body) {
+            req.body.taskIds = [];
+            req.body.userId = res.locals.user._id;
+            let tagData = await Tag.create(req.body);
+            if (tagData) {
+                return res.redirect("back");
+            } else {
+                console.log("List not inserted");
+                return res.redirect("back");
+            }
+        } else {
+            console.log("Something went wrong");
+            return res.redirect("back");
+        }
     } catch (err) {
         console.log(err);
         return res.redirect("back");

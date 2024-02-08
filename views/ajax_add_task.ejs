@@ -5,44 +5,99 @@
             <i class="fa-solid fa-xmark"></i>
         </button>
     </div>
-    <form method="post" action="/insertTask" class="flex flex-col justify-between h-[95%]">
+    <form
+        method="post"
+        action="/insertTask"
+        class="flex flex-col justify-between h-[95%]"
+    >
         <div>
             <div class="mt-5">
-                <label for="task-name" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Enter Task Name:</label>
-                <input type="text" name="taskName" id="task-name" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 " placeholder="e.g. Renew driver's license" required>
+                <label
+                    for="task-name"
+                    class="block text-sm font-medium leading-6 text-gray-600 mb-2"
+                    >Enter Task Name:</label
+                >
+                <input
+                    type="text"
+                    name="taskName"
+                    id="task-name"
+                    class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                    placeholder="e.g. Renew driver's license"
+                    required
+                />
             </div>
             <div class="mt-5">
-                <label for="description" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Enter description (Optional):</label>
-                <textarea rows="5" type="text" name="description" id="description" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 resize-none " placeholder="e.g. Ensure legal driving privileges by renewing your driver's license before its expiry date."></textarea>
+                <label
+                    for="description"
+                    class="block text-sm font-medium leading-6 text-gray-600 mb-2"
+                    >Enter description (Optional):</label
+                >
+                <textarea
+                    rows="5"
+                    type="text"
+                    name="description"
+                    id="description"
+                    class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 resize-none"
+                    placeholder="e.g. Ensure legal driving privileges by renewing your driver's license before its expiry date."
+                ></textarea>
             </div>
             <div class="mt-5">
-                <label for="task-list" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Assign To List:</label>
-                <select name="taskList" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" id="task-list">
-                    <option value="" disabled="" selected="">-- Select Task List --</option>
+                <label
+                    for="task-list"
+                    class="block text-sm font-medium leading-6 text-gray-600 mb-2"
+                    >Assign To List:</label
+                >
+                <select
+                    name="taskList"
+                    class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                    id="task-list"
+                >
+                    <option value="" disabled="" selected="">
+                        -- Select Task List --
+                    </option>
                     <% listData.map((v, i) => { %>
-                        <option value="<%= v.id %>"><%= v.listName %></option>
+                    <option value="<%= v.id %>"><%= v.listName %></option>
                     <% }); %>
                 </select>
             </div>
             <div class="mt-5">
-                <label for="due-date" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Due Date:</label>
-                <input type="date" name="dueDate" class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 px-3 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" id="due-date">
+                <label
+                    for="due-date"
+                    class="block text-sm font-medium leading-6 text-gray-600 mb-2"
+                    >Due Date:</label
+                >
+                <input
+                    type="date"
+                    name="dueDate"
+                    class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 px-3 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                    id="due-date"
+                />
             </div>
             <div class="mt-5">
-                <label class="block text-sm font-medium leading-6 text-gray-600 mb-2">Task Tags (Optional):</label>
-                <% tags = ["Communication", "Research", "Travelling", "Testing"] %>
+                <label
+                    class="block text-sm font-medium leading-6 text-gray-600 mb-2"
+                    >Task Tags (Optional):</label
+                >
                 <div class="flex flex-wrap ml-3">
-                    <% tags.map((v, i) => { %>
-                        <label class="flex">
-                            <input type="checkbox" value="<%= v %>" name="taskTags[]">
-                            <span class="mx-2"><%= v %></span>
-                        </label>
+                    <% tagData.map((v, i) => { %>
+                    <label class="flex">
+                        <input
+                            type="checkbox"
+                            value="<%= v.id %>"
+                            name="taskTags[]"
+                        />
+                        <span class="mx-2"><%= v.tagName %></span>
+                    </label>
                     <% }); %>
                 </div>
             </div>
         </div>
         <div class="mt-5">
-            <input type="submit" class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded" value="Submit">
+            <input
+                type="submit"
+                class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded"
+                value="Submit"
+            />
         </div>
     </form>
 </div>

@@ -77,6 +77,8 @@ routes.post("/editList", homeController.editList);
 
 routes.get("/add_tag_model", homeController.add_tag_model);
 
+routes.post("/insertTag", homeController.insertTag);
+
 routes.post("/deleteMul", homeController.deleteMul);
 
 module.exports = routes;
