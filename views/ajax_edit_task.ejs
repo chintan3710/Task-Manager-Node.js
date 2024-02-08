@@ -31,12 +31,11 @@
             </div>
             <div class="mt-5">
                 <label class="block text-sm font-medium leading-6 text-gray-600 mb-2">Task Tags (Optional):</label>
-                <% tags = ["Communication", "Research", "Travelling", "Testing"] %>
                 <div class="flex flex-wrap ml-3">
-                    <% tags.map((v, i) => { %>
+                    <% tagData.map((v, i) => { %>
                         <label class="flex">
-                            <input type="checkbox" value="<%= v %>" name="taskTags[]" <% if(taskData.taskTags.includes(v)){ %> checked <% } %>>
-                            <span class="mx-2"><%= v %></span>
+                            <input type="checkbox" value="<%= v.id %>" name="taskTags[]" <% if(taskData.taskTags.includes(v.id)){ %> checked <% } %> />
+                            <span class="mx-2"><%= v.tagName %></span>
                         </label>
                     <% }); %>
                 </div>

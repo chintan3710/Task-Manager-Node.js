@@ -194,11 +194,13 @@ module.exports.edit_task_model = async (req, res) => {
     try {
         if (req.body) {
             let taskData = await Task.findById(req.body.taskId);
-            let listData = await List.find({});
+            let listData = await List.find({ userId: res.locals.user._id });
+            let tagData = await Tag.find({ userId: res.locals.user._id });
             if (taskData) {
                 return res.render("ajax_edit_task", {
                     taskData: taskData,
                     listData: listData,
+                    tagData: tagData,
                 });
             } else {
                 console.log("Task not found");
@@ -505,7 +507,25 @@ module.exports.insertTag = async (req, res) => {
 
 module.exports.viewTaskOnTag = async (req, res) => {
     if (req.query) {
-        let taskData = await Task.find;
+        let taskData = await Task.find({
+            userId: res.locals.user._id,
+            taskTags: req.query.id,
+        })
+            .populate("taskList")
+            .exec();
+        let listData = await List.find({ userId: res.locals.user._id });
+        let tagData = await Tag.find({ userId: res.locals.user._id });
+        let countTaskData = await Task.find({
+            userId: res.locals.user._id,
+        }).countDocuments();
+        let listId = "";
+        return res.render("ajax_home_list", {
+            taskData: taskData,
+            listData: listData,
+            tagData: tagData,
+            countTaskData: countTaskData,
+            listId: listId,
+        });
     } else {
         console.log("Invalid parameters");
         return res.redirect("back");
