@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <div class="w-[600px] mx-auto h-screen p-5">
+            <div
+                class="border w-full h-full rounded-lg px-[100px] py-[150px] flex flex-col justify-center"
+            >
+                <h2 class="text-4xl font-bold mb-5">Forget Password</h2>
+                <form method="post" action="/sentOtp">
+                    <input
+                        type="text"
+                        name="email"
+                        class="w-full rounded-md outline-none shadow-sm border pl-2 py-2 sm:text-sm sm:leading-6 font-medium"
+                        value="chintanrajpara34@gmail.com"
+                        placeholder="Enter your email"
+                    />
+                    <button
+                        type="submit"
+                        class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded mt-5"
+                    >
+                        Sent OTP
+                    </button>
+                </form>
+                <div class="flex items-center my-5">
+                    <span
+                        class="inline-block h-0.5 w-1/2 bg-[#ebebeb] rounded-lg"
+                    ></span>
+                    <p class="text-gray-400 mx-4">or</p>
+                    <span
+                        class="inline-block h-0.5 w-1/2 bg-[#ebebeb] rounded-lg"
+                    ></span>
+                </div>
+                <p class="font-medium text-center mt-5">
+                    Signin to your account.
+                    <a href="/" class="text-[#ffd43b]">Sign in</a>
+                </p>
+            </div>
+        </div>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </body>
+</html>

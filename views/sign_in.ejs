@@ -15,35 +15,79 @@
     <body>
         <div class="flex justify-center">
             <div class="w-[600px] h-screen p-5">
-                <img src="/img/sign-in.jpg" alt="sign-in" class="w-full h-full object-cover rounded-lg" />
+                <img
+                    src="/img/sign-in.jpg"
+                    alt="sign-in"
+                    class="w-full h-full object-cover rounded-lg"
+                />
             </div>
             <div class="w-[600px] h-screen p-5">
-                <div class="border w-full h-full rounded-lg px-[100px] py-[150px]">
+                <div
+                    class="border w-full h-full rounded-lg px-[100px] py-[150px]"
+                >
                     <h2 class="text-4xl font-bold mb-5">Sign in</h2>
                     <form method="post" action="/signInUser">
-                        <input type="text" name="email" class="w-full rounded-md outline-none shadow-sm border pl-2 py-2 sm:text-sm sm:leading-6 font-medium" value="chintanrajpara34@gmail.com" placeholder="Enter your email" />
-                        <div class="relative mt-3 mb-7">
-                            <input type="password" name="password" id="password" class="w-full rounded-md outline-none shadow-sm border pl-2 py-2 sm:text-sm sm:leading-6 font-medium" value="12345" placeholder="Enter Password" />
-                            <button type="button" onclick="displayPassword()" class="absolute top-1/2 -translate-y-1/2 right-0 mr-2 cursor-pointer">
+                        <input
+                            type="text"
+                            name="email"
+                            class="w-full rounded-md outline-none shadow-sm border pl-2 py-2 sm:text-sm sm:leading-6 font-medium"
+                            value="chintanrajpara34@gmail.com"
+                            placeholder="Enter your email"
+                        />
+                        <div class="relative mt-3">
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                class="w-full rounded-md outline-none shadow-sm border pl-2 py-2 sm:text-sm sm:leading-6 font-medium"
+                                value="12345"
+                                placeholder="Enter Password"
+                            />
+                            <button
+                                type="button"
+                                onclick="displayPassword()"
+                                class="absolute top-1/2 -translate-y-1/2 right-0 mr-2 cursor-pointer"
+                            >
                                 <i class="fa-regular fa-eye"></i>
                             </button>
                         </div>
-                        <button type="submit" class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded">Sign in</button>
+                        <p class="font-medium text-end mt-1 mb-7">
+                            <a href="/forget_pass">Forget Password?</a>
+                        </p>
+                        <button
+                            type="submit"
+                            class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded"
+                        >
+                            Sign in
+                        </button>
                     </form>
                     <div class="flex items-center my-5">
-                        <span class="inline-block h-0.5 w-1/2 bg-[#ebebeb] rounded-lg"></span>
+                        <span
+                            class="inline-block h-0.5 w-1/2 bg-[#ebebeb] rounded-lg"
+                        ></span>
                         <p class="text-gray-400 mx-4">or</p>
-                        <span class="inline-block h-0.5 w-1/2 bg-[#ebebeb] rounded-lg"></span>
+                        <span
+                            class="inline-block h-0.5 w-1/2 bg-[#ebebeb] rounded-lg"
+                        ></span>
                     </div>
                     <div class="flex items-center justify-center">
-                        <a href="/google" class="group font-semibold bg-[#ebebeb] py-2.5 px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500 w-1/2 text-center mr-3">
+                        <a
+                            href="/google"
+                            class="group font-semibold bg-[#ebebeb] py-2.5 px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500 w-1/2 text-center mr-3"
+                        >
                             Google
                         </a>
-                        <a href="/github" class="group font-semibold bg-[#ebebeb] py-2.5 px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500 w-1/2 text-center ml-3">
+                        <a
+                            href="/github"
+                            class="group font-semibold bg-[#ebebeb] py-2.5 px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500 w-1/2 text-center ml-3"
+                        >
                             Github
                         </a>
                     </div>
-                    <p class="font-medium text-center mt-5">Don't have account? <a href="/sign_up" class="text-[#ffd43b]">Sign up</a></p>
+                    <p class="font-medium text-center mt-5">
+                        Don't have account?
+                        <a href="/sign_up" class="text-[#ffd43b]">Sign up</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -51,11 +95,10 @@
         <script>
             let temp = true;
             let displayPassword = () => {
-                if(temp){
+                if (temp) {
                     document.getElementById("password").type = "text";
                     temp = false;
-                }
-                else {
+                } else {
                     document.getElementById("password").type = "password";
                     temp = true;
                 }

@@ -6,6 +6,10 @@ const User = require("../models/User");
 
 const Tag = require("../models/Tag");
 
+const fs = require("fs");
+
+const path = require("path");
+
 const bcrypt = require("bcrypt");
 
 const nodemailer = require("nodemailer");
@@ -77,7 +81,7 @@ module.exports.signUpUser = async (req, res) => {
     try {
         if (req.body) {
             let checkData = await User.find({ email: req.body.email });
-            if (checkData != null) {
+            if (checkData == "") {
                 if (req.body.password == req.body.cPassword) {
                     let mailPass = req.body.password;
                     req.body.password = await bcrypt.hash(
@@ -86,6 +90,26 @@ module.exports.signUpUser = async (req, res) => {
                     );
                     let userData = await User.create(req.body);
                     if (userData) {
+                        const readFileContent = fs.readFileSync(
+                            path.join(
+                                __dirname,
+                                "../templetes/new_registration_email.ejs"
+                            ),
+                            "utf8"
+                        );
+                        const lines = readFileContent.split("\n");
+                        lines.splice(
+                            25,
+                            0,
+                            `<strong>Email:</strong> ${req.body.email}`
+                        );
+                        lines.splice(
+                            27,
+                            0,
+                            `<strong>Password:</strong> ${mailPass}`
+                        );
+                        const newFileContents = lines.join("\n");
+
                         const transporter = nodemailer.createTransport({
                             host: "smtp.gmail.com",
                             port: 465,
@@ -100,7 +124,7 @@ module.exports.signUpUser = async (req, res) => {
                             to: req.body.email,
                             subject: "Sent Pass",
                             text: "Your password is here!",
-                            html: `<b>${mailPass}</b>`,
+                            html: `${newFileContents}`,
                         });
                         return res.redirect("/");
                     } else {
@@ -112,7 +136,137 @@ module.exports.signUpUser = async (req, res) => {
                     return res.redirect("back");
                 }
             } else {
-                console.log("Email already exist");
+                console.log("Email already exist. Login to view profile");
+                return res.redirect("/");
+            }
+        } else {
+            console.log("Something went wrong");
+            return res.redirect("back");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.forget_pass = async (req, res) => {
+    try {
+        return res.render("forget_pass");
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.sentOtp = async (req, res) => {
+    try {
+        if (req.body) {
+            let checkMail = await User.findOne({ email: req.body.email });
+            if (checkMail) {
+                let otp = Math.round(100000 + Math.random() * 99999);
+                const transporter = nodemailer.createTransport({
+                    host: "smtp.gmail.com",
+                    port: 465,
+                    secure: true,
+                    auth: {
+                        user: "yom.no.replay@gmail.com",
+                        pass: process.env.NODE_MAILER_PASS,
+                    },
+                });
+                const info = await transporter.sendMail({
+                    from: "yom.no.replay@gmail.com",
+                    to: req.body.email,
+                    subject: "Sent OTP",
+                    text: "Your otp is here!",
+                    html: `${otp}`,
+                });
+                res.cookie("email", req.body.email);
+                res.cookie("otp", otp);
+                if (info) {
+                    return res.redirect("/check_otp");
+                } else {
+                    console.log("Something went wrong");
+                    return res.redirect("back");
+                }
+            } else {
+                console.log("Email not registered");
+                return res.redirect("back");
+            }
+        } else {
+            console.log("Data not found");
+            return res.redirect("back");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.check_otp = async (req, res) => {
+    try {
+        return res.render("check_otp");
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.verifyOtp = async (req, res) => {
+    try {
+        if (req.cookies.otp == req.body.otp) {
+            return res.redirect("/change_pass");
+        } else {
+            console.log("Invalid OTP");
+            return res.redirect("back");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.change_pass = async (req, res) => {
+    try {
+        return res.render("change_pass");
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.changePass = async (req, res) => {
+    try {
+        if (req.body) {
+            let checkMail = await User.findOne({ email: req.cookies.email });
+            if (checkMail) {
+                if (
+                    await bcrypt.compare(req.body.password, checkMail.password)
+                ) {
+                    console.log("This password is already used");
+                    return res.redirect("back");
+                } else {
+                    if (req.body.password == req.body.c_pass) {
+                        let pass = await bcrypt.hash(req.body.password, 10);
+                        let updateData = await User.findByIdAndUpdate(
+                            checkMail.id,
+                            {
+                                password: pass,
+                            }
+                        );
+                        if (updateData) {
+                            console.log("Password updated successfully");
+                            return res.redirect("/");
+                        } else {
+                            console.log("Password not updated");
+                            return res.redirect("back");
+                        }
+                    } else {
+                        console.log("Password not match");
+                        return res.redirect("back");
+                    }
+                }
+            } else {
+                console.log("Invalid email");
                 return res.redirect("back");
             }
         } else {
@@ -164,7 +318,6 @@ module.exports.insertTask = async (req, res) => {
                         editTagData = await Tag.findByIdAndUpdate(v.id, v);
                     });
                     setTimeout(() => {
-                        console.log(tagData);
                     }, 1000);
                     if (editListData) {
                         return res.redirect("back");
@@ -534,31 +687,21 @@ module.exports.viewTaskOnTag = async (req, res) => {
 
 module.exports.deleteMul = async (req, res) => {
     try {
-        // console.log(req.body);
         if (req.body) {
             let taskData = await Task.find({}).populate("taskList").exec();
             let listData, editListData, pos;
             if (taskData) {
                 req.body.pos.map(async (v, i) => {
-                    // console.log(taskData[v].taskList.id);
                     listData = await List.findById(taskData[v].taskList.id);
-                    // console.log(listData);
                     if (listData) {
                         pos = parseInt(
                             listData.taskIds.indexOf(taskData[v].id)
                         );
-                        // console.log(pos, taskData[v].taskList.id, taskData[v].id);
                         if (pos >= 0) {
-                            console.log(listData);
                             listData.taskIds.splice(pos, 1);
-                            // console.log(listData);
-
                             editListData = await List.findByIdAndUpdate(
                                 taskData[v].taskList.id,
                                 listData
-                            );
-                            console.log(
-                                await List.findById(taskData[v].taskList.id)
                             );
                             if (editListData) {
                                 let deleteTask = await Task.findByIdAndDelete(

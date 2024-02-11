@@ -53,6 +53,18 @@ routes.get(
     })
 );
 
+routes.get("/forget_pass", homeController.forget_pass);
+
+routes.post("/sentOtp", homeController.sentOtp);
+
+routes.get("/check_otp", homeController.check_otp);
+
+routes.get("/change_pass", homeController.change_pass);
+
+routes.post("/changePass", homeController.changePass);
+
+routes.post("/verifyOtp", homeController.verifyOtp);
+
 routes.get("/add_task_model", homeController.add_task_model);
 
 routes.post("/insertTask", homeController.insertTask);
