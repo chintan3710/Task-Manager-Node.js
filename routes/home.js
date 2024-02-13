@@ -7,22 +7,29 @@ const homeController = require("../controller/homeController");
 const routes = express();
 
 routes.get("/", async (req, res) => {
-    // console.log(res.locals.user);
     let data = res.locals.user;
     if (data) {
         return res.redirect("/home");
     } else {
-        return res.render("sign_in");
+        // req.flash("error", "Invalid Data");
+        return res.redirect("/sign_in");
     }
 });
 
 routes.get("/home", Passport.checkAuth, homeController.home);
 
+routes.get("/sign_in", homeController.sign_in);
+
 routes.post(
     "/signInUser",
-    Passport.authenticate("userLogin", { failureRedirect: "/" }),
+    Passport.authenticate("userLogin", { failureRedirect: "/failLogin" }),
     homeController.signInUser
 );
+
+routes.get("/failLogin", async (req, res) => {
+    req.flash("error", "Invalid username or password");
+    return res.redirect("/sign_in");
+});
 
 routes.get("/sign_up", homeController.sign_up);
 
@@ -94,5 +101,7 @@ routes.post("/insertTag", homeController.insertTag);
 routes.get("/viewTaskOnTag", homeController.viewTaskOnTag);
 
 routes.post("/deleteMul", homeController.deleteMul);
+
+routes.get("/viewProfile", homeController.viewProfile);
 
 module.exports = routes;

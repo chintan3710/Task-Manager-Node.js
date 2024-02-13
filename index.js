@@ -12,11 +12,15 @@ const cookieParser = require("cookie-parser");
 
 const session = require("express-session");
 
+const flash = require("connect-flash");
+
 const PassportLocal = require("./config/passport-local-strategy");
 
 const GoogleStrategy = require("./config/google-strategy");
 
 const GithubStrategy = require("./config/github-strategy");
+
+const custom = require("./config/connect-flash");
 
 mongoose
     .connect(process.env.MONGO_URL, {
@@ -53,6 +57,10 @@ app.use(Passport.session());
 app.use(Passport.setAuth);
 
 app.use(cookieParser());
+
+app.use(flash());
+
+app.use(custom.setFlash);
 
 app.use(express.urlencoded());
 

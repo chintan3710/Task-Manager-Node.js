@@ -45,8 +45,18 @@ module.exports.home = async (req, res) => {
     }
 };
 
+module.exports.sign_in = async (req, res) => {
+    try {
+        return res.render("sign_in");
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
 module.exports.signInUser = async (req, res) => {
     try {
+        req.flash("success", "Login Successfully");
         return res.redirect("/home");
     } catch (err) {
         console.log(err);
@@ -317,9 +327,8 @@ module.exports.insertTask = async (req, res) => {
                         v.taskIds.push(taskData.id);
                         editTagData = await Tag.findByIdAndUpdate(v.id, v);
                     });
-                    setTimeout(() => {
-                    }, 1000);
                     if (editListData) {
+                        req.flash("success", "Task added Successfully");
                         return res.redirect("back");
                     } else {
                         console.log("List not edited");
@@ -398,6 +407,10 @@ module.exports.editTask = async (req, res) => {
                                 newListData
                             );
                             if (updateNewList) {
+                                req.flash(
+                                    "success",
+                                    "Task edited Successfully"
+                                );
                                 return res.redirect("back");
                             } else {
                                 console.log("New list not updated");
@@ -447,6 +460,7 @@ module.exports.deleteTask = async (req, res) => {
                             req.query.id
                         );
                         if (deleteData) {
+                            req.flash("success", "Task deleted Successfully");
                             return res.redirect("back");
                         } else {
                             console.log("Task not deleted");
@@ -490,6 +504,7 @@ module.exports.insertList = async (req, res) => {
             req.body.userId = res.locals.user._id;
             let listData = await List.create(req.body);
             if (listData) {
+                req.flash("success", "List added Successfully");
                 return res.redirect("back");
             } else {
                 console.log("List not inserted");
@@ -575,6 +590,7 @@ module.exports.deleteList = async (req, res) => {
                 if (deleteTask) {
                     let deleteList = await List.findByIdAndDelete(req.query.id);
                     if (deleteList) {
+                        req.flash("success", "List deleted Successfully");
                         return res.redirect("back");
                     } else {
                         console.log("List not deleted");
@@ -608,6 +624,7 @@ module.exports.editList = async (req, res) => {
                     req.body
                 );
                 if (editData) {
+                    req.flash("success", "List edited Successfully");
                     return res.redirect("back");
                 } else {
                     console.log("List not edited");
@@ -728,6 +745,28 @@ module.exports.deleteMul = async (req, res) => {
         } else {
             console.log("Invalid parameters");
             // return res.redirect("back");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.viewProfile = async (req, res) => {
+    try {
+        if (req.query) {
+            let userData = await User.findById(req.query.id);
+            if (userData) {
+                return res.render("ajax_profile", {
+                    userData: userData,
+                });
+            } else {
+                console.log("User not found");
+                return res.redirect("back");
+            }
+        } else {
+            console.log("Invalid parameters");
+            return res.redirect("back");
         }
     } catch (err) {
         console.log(err);
