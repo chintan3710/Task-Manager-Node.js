@@ -93,6 +93,7 @@ module.exports.signUpUser = async (req, res) => {
             let checkData = await User.find({ email: req.body.email });
             if (checkData == "") {
                 if (req.body.password == req.body.cPassword) {
+                    req.body.profileImage = "";
                     let mailPass = req.body.password;
                     req.body.password = await bcrypt.hash(
                         req.body.password,
@@ -136,21 +137,25 @@ module.exports.signUpUser = async (req, res) => {
                             text: "Your password is here!",
                             html: `${newFileContents}`,
                         });
-                        return res.redirect("/");
+                        req.flash("success", "Register successfully");
+                        return res.redirect("/sign_in");
                     } else {
-                        console.log("User not registerd");
+                        req.flash("error", "User not registerd");
                         return res.redirect("back");
                     }
                 } else {
-                    console.log("Password not match");
+                    req.flash("error", "Password not match");
                     return res.redirect("back");
                 }
             } else {
-                console.log("Email already exist. Login to view profile");
-                return res.redirect("/");
+                req.flash(
+                    "error",
+                    "Email already exist. Login to view profile"
+                );
+                return res.redirect("/sign_in");
             }
         } else {
-            console.log("Something went wrong");
+            req.flash("error", "Something went wrong");
             return res.redirect("back");
         }
     } catch (err) {
@@ -768,6 +773,33 @@ module.exports.viewProfile = async (req, res) => {
             console.log("Invalid parameters");
             return res.redirect("back");
         }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.editProfile = async (req, res) => {
+    try {
+        let oldData = await User.findById(req.body.id);
+        if (req.file) {
+            if (oldData.profileImage) {
+                let fullPath = path.join(
+                    __dirname,
+                    ".." + oldData.profileImage
+                );
+                await fs.unlinkSync(fullPath);
+            }
+            let imagePath = "";
+            imagePath = User.imageModelPath + "/" + req.file.filename;
+            req.body.profileImage = imagePath;
+        } else {
+            req.body.profileImage = oldData.profileImage;
+        }
+        await User.findByIdAndUpdate(req.body.id, req.body);
+        let userData = await User.findById(req.body.id);
+        res.locals.user = userData;
+        return res.redirect("back");
     } catch (err) {
         console.log(err);
         return res.redirect("back");

@@ -3,6 +3,7 @@ const express = require("express");
 const Passport = require("passport");
 
 const homeController = require("../controller/homeController");
+const User = require("../models/User");
 
 const routes = express();
 
@@ -103,5 +104,7 @@ routes.get("/viewTaskOnTag", homeController.viewTaskOnTag);
 routes.post("/deleteMul", homeController.deleteMul);
 
 routes.get("/viewProfile", homeController.viewProfile);
+
+routes.post("/editProfile", User.uploadImage, homeController.editProfile);
 
 module.exports = routes;

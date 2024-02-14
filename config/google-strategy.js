@@ -23,6 +23,7 @@ passport.use(
                 let userdetails = {
                     name: profile.displayName,
                     email: profile.emails[0].value,
+                    profileImage: "",
                     password: await bcrypt.hash("12345", 10),
                 };
                 let userdatanew = await User.create(userdetails);

@@ -1,43 +1,65 @@
 <div class="absolute top-0 left-0 right-0 bottom-0 p-5 bg-[#f4f4f4]">
     <div class="flex items-center justify-between text-xl">
-        <h2>Add List:</h2>
+        <h2>Profile:</h2>
         <button onclick="return closeModel()">
             <i class="fa-solid fa-xmark"></i>
         </button>
     </div>
     <form
         method="post"
-        action="/insertList"
+        action="/editProfile"
         class="flex flex-col justify-between h-[95%]"
+        enctype="multipart/form-data"
     >
+        <input type="hidden" value="<%= userData.id %>" name="id" />
         <div>
-            <div class="mt-5">
-                <label
-                    for="list-name"
-                    class="block text-sm font-medium leading-6 text-gray-600 mb-2"
-                    >Enter List Name:</label
+            <div
+                class="group w-[200px] h-[200px] border-4 border-black-500 rounded-full mx-auto overflow-hidden relative before:absolute before:h-full before:w-full before:bg-gray-200 before:opacity-0 hover:before:opacity-60 before:trasition-all before:duration-200"
+            >
+                <input
+                    type="file"
+                    name="profileImage"
+                    class="absolute w-[200px] h-[200px] rounded-full opacity-0 cursor-pointer z-50"
+                    id="profile-image"
+                />
+                <span
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl hidden group-hover:block trasition-all duration-200"
                 >
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                </span>
+                <% if(userData.profileImage) { %>
+                <img
+                    src="<%= userData.profileImage %>"
+                    alt="profile-img"
+                    class="w-full h-full object-cover"
+                />
+                <% } else { %>
+                <img
+                    src="/img/profile-dummy.png"
+                    alt="profile-img"
+                    class="w-full h-full object-cover"
+                />
+                <% } %>
+            </div>
+            <div class="mt-5">
                 <input
                     type="text"
-                    name="listName"
-                    id="list-name"
+                    name="name"
+                    id="name"
                     class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                    placeholder="e.g. Personal"
+                    placeholder="Enter your name"
+                    value="<%= userData.name %>"
                     required
                 />
             </div>
             <div class="mt-5">
-                <label
-                    for="list-color"
-                    class="block text-sm font-medium leading-6 text-gray-600 mb-2"
-                    >Select List Color:</label
-                >
                 <input
-                    type="color"
-                    name="listColor"
-                    id="list-color"
-                    class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 px-3 h-[50px] bg-[#ffffff]"
-                    placeholder="e.g. Personal"
+                    type="text"
+                    name="email"
+                    id="email"
+                    class="block w-[-webkit-fill-available] rounded-md border-0 outline-none shadow-sm ml-3 py-1.5 pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                    placeholder="Enter your email"
+                    value="<%= userData.email %>"
                     required
                 />
             </div>
@@ -46,7 +68,7 @@
             <input
                 type="submit"
                 class="w-full cursor-pointer bg-[#ffd43b] text-black font-semibold py-2 px-4 rounded"
-                value="Submit"
+                value="Save Changes"
             />
         </div>
     </form>

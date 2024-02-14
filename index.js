@@ -68,6 +68,8 @@ app.use("/", require("./routes/home"));
 
 app.use(express.static(path.join(__dirname, "assets")));
 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.listen(port, (err) => {
     err
         ? console.log("Server not responding")
