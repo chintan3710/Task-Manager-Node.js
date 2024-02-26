@@ -19,7 +19,6 @@ module.exports.home = async (req, res) => {
         if (req.isAuthenticated()) {
             let taskData = await Task.find({
                 userId: res.locals.user._id,
-                status: "pending",
             })
                 .populate("taskList")
                 .exec();
@@ -692,6 +691,7 @@ module.exports.viewTaskOnTag = async (req, res) => {
         let tagData = await Tag.find({ userId: res.locals.user._id });
         let countTaskData = await Task.find({
             userId: res.locals.user._id,
+            status: "pending",
         }).countDocuments();
         let listId = "";
         return res.render("ajax_home_list", {
@@ -800,6 +800,130 @@ module.exports.editProfile = async (req, res) => {
         let userData = await User.findById(req.body.id);
         res.locals.user = userData;
         return res.redirect("back");
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.assignToComplete = async (req, res) => {
+    try {
+        if (req.query) {
+            let taskData = await Task.findById(req.query.id);
+            if (taskData) {
+                taskData.status = "complete";
+                let editData = await Task.findByIdAndUpdate(
+                    req.query.id,
+                    taskData
+                );
+                if (editData) {
+                    req.flash("success", "Assign to completed");
+                    return res.redirect("/toComplete");
+                } else {
+                    console.log("Data not updated");
+                    return res.redirect("back");
+                }
+            } else {
+                console.log("Task not available");
+                return res.redirect("back");
+            }
+        } else {
+            console.log("Invalid parameters");
+            return res.redirect("back");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.toComplete = async (req, res) => {
+    try {
+        let taskData = await Task.find({
+            userId: res.locals.user._id,
+        })
+            .populate("taskList")
+            .exec();
+        let listData = await List.find({
+            userId: res.locals.user._id,
+        });
+        let tagData = await Tag.find({
+            userId: res.locals.user._id,
+        });
+        let countTaskData = await Task.find({
+            userId: res.locals.user._id,
+            status: "pending",
+        }).countDocuments();
+        let listId = "";
+        return res.render("ajax_home_list", {
+            taskData: taskData,
+            listData: listData,
+            tagData: tagData,
+            countTaskData: countTaskData,
+            listId: listId,
+        });
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.assignToPending = async (req, res) => {
+    try {
+        if (req.query) {
+            let taskData = await Task.findById(req.query.id);
+            if (taskData) {
+                taskData.status = "pending";
+                let editData = await Task.findByIdAndUpdate(
+                    req.query.id,
+                    taskData
+                );
+                if (editData) {
+                    req.flash("success", "Assign to pending");
+                    return res.redirect("/toPending");
+                } else {
+                    console.log("Data not updated");
+                    return res.redirect("back");
+                }
+            } else {
+                console.log("Task not available");
+                return res.redirect("back");
+            }
+        } else {
+            console.log("Invalid parameters");
+            return res.redirect("back");
+        }
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.toPending = async (req, res) => {
+    try {
+        let taskData = await Task.find({
+            userId: res.locals.user._id,
+        })
+            .populate("taskList")
+            .exec();
+        let listData = await List.find({
+            userId: res.locals.user._id,
+        });
+        let tagData = await Tag.find({
+            userId: res.locals.user._id,
+        });
+        let countTaskData = await Task.find({
+            userId: res.locals.user._id,
+            status: "complete",
+        }).countDocuments();
+        let listId = "";
+        return res.render("ajax_home_list", {
+            taskData: taskData,
+            listData: listData,
+            tagData: tagData,
+            countTaskData: countTaskData,
+            listId: listId,
+        });
     } catch (err) {
         console.log(err);
         return res.redirect("back");

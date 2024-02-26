@@ -12,7 +12,6 @@ routes.get("/", async (req, res) => {
     if (data) {
         return res.redirect("/home");
     } else {
-        // req.flash("error", "Invalid Data");
         return res.redirect("/sign_in");
     }
 });
@@ -106,5 +105,13 @@ routes.post("/deleteMul", homeController.deleteMul);
 routes.get("/viewProfile", homeController.viewProfile);
 
 routes.post("/editProfile", User.uploadImage, homeController.editProfile);
+
+routes.get("/assignToComplete", homeController.assignToComplete);
+
+routes.get("/toComplete", homeController.toComplete);
+
+routes.get("/assignToPending", homeController.assignToPending);
+
+routes.get("/toPending", homeController.toPending);
 
 module.exports = routes;

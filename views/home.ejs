@@ -78,7 +78,7 @@
                                     </p>
                                     <span
                                         class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white"
-                                        ><%= taskData.length %></span
+                                        ><%= countTaskData %></span
                                     >
                                 </a>
                             </li>
@@ -260,7 +260,7 @@
                                     Today
                                     <span
                                         class="border font-semibold inline-block h-[45px] w-[45px] text-center leading-[45px] rounded-lg ml-5"
-                                        ><%= taskData.length %></span
+                                        ><%= countTaskData %></span
                                     >
                                 </h2>
                                 <!-- <div class="mt-5"> -->
@@ -299,77 +299,24 @@
                                     </p>
                                 </button>
                             </li>
-                            <!-- <li>
-                                <div
-                                    class="w-full flex items-center py-2 px-3 rounded-lg border"
-                                >
-                                    <label
-                                        class="sub flex flex-wrap items-center justify-between rounded-lg"
-                                    >
-                                        <input type="checkbox" id="selectAll" />
-                                    </label>
-                                    <button
-                                        onclick="return deleteTaskMul()"
-                                        class="text-stone-500 relative group mx-3"
-                                    >
-                                        <i class="fa-regular fa-trash-can"></i>
-                                        <span
-                                            class="absolute top-full left-1/2 -translate-x-1/2 bg-zinc-400 py-1 px-2 rounded-lg text-white invisible group-hover:visible before:absolute before:left-1/2 before:-translate-x-1/2 before:top-[-6px] before:w-0 before:h-0 before:border-solid before:border-t-0 before:border-r-[10px] before:border-b-[10px] before:border-l-[10px] before:border-transparent before:border-b-zinc-400"
-                                            >Delete</span
-                                        >
-                                    </button>
-                                    <button
-                                        class="text-stone-500 relative group"
-                                    >
-                                        <i class="fa-solid fa-check"></i>
-                                        <span
-                                            class="absolute top-full left-1/2 -translate-x-1/2 bg-zinc-400 py-1 px-2 rounded-lg text-white invisible group-hover:visible before:absolute before:left-1/2 before:-translate-x-1/2 before:top-[-6px] before:w-0 before:h-0 before:border-solid before:border-t-0 before:border-r-[10px] before:border-b-[10px] before:border-l-[10px] before:border-transparent before:border-b-zinc-400"
-                                            >Complete</span
-                                        >
-                                    </button>
-                                    <div class="group relative">
-                                        <button
-                                            class="px-4 py-2 bg-blue-500 text-white rounded"
-                                        >
-                                            Hover me
-                                        </button>
-                                        <div
-                                            class="absolute invisible group-hover:visible p-2 bg-gray-200 rounded shadow-md top-full left-1/2 -translate-x-1/2"
-                                        >
-                                            This is the tooltip content.
-                                        </div>
-                                    </div>
-                                    <p
-                                        class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black"
-                                    >
-                                        <span
-                                            class="h-4 w-4 inline-block mr-3 rounded-md mb-[4px]"
-                                        >
-                                            <i class="fa-solid fa-plus"></i>
-                                        </span>
-                                        Add New Task
-                                    </p>
-                                </div>
-                            </li> -->
-                            <% if(taskData != ""){ for(let tData of taskData){
-                            %>
+                            <% if(taskData != ""){for(let tData of taskData){ if(tData.status == "pending"){ %>
                             <li
                                 class="border-b hover:rounded-lg trasition-all duration-300"
                             >
-                                <label
+                                <div
                                     class="sub flex flex-wrap items-center justify-between hover:bg-gray-300 duration-300 rounded-lg py-2 px-3"
                                 >
                                     <div class="w-11/12">
                                         <div
-                                            for="<%= tData.taskName %>"
                                             class="flex items-center w-[-webkit-fill-available]"
                                         >
                                             <input
-                                                type="checkbox"
-                                                id="<%= tData.taskName %>"
-                                                class="checkboxSub"
+                                                type="radio"
+                                                name="task-pending"
+                                                onchange="assignToComplete('<%= tData.id %>')"
                                             />
                                             <p
+                                                id="<%= tData.id %>"
                                                 class="font-medium text-sm text-stone-500 ml-3"
                                             >
                                                 <%= tData.taskName %>
@@ -433,14 +380,14 @@
                                             </span>
                                         </div>
                                     </div>
-                                </label>
+                                </div>
                                 <!-- <div class=" items-center justify-between hover:bg-gray-300 rounded-lg">
                                             <span class="ml-6">
                                                 <i class="fa-solid fa-calendar-xmark"></i>
                                             </span>
                                         </div> -->
                             </li>
-                            <% } } else{ %>
+                            <% } } } else{ %>
                             <li
                                 class="border-b hover:rounded-lg trasition-all duration-300 py-3 text-center"
                             >
@@ -451,6 +398,110 @@
                             <% } %>
                         </ul>
                         <!-- </form> -->
+
+                        
+                        <!-- <div class="max-w-md mx-auto"> -->
+
+                            <!-- Accordion Item 1 -->
+                            <div class="rounded-md mb-4">
+                              <button class="w-full text-left px-3 py-2 hover:bg-gray-300 focus:outline-none w-fit" id="btn-acc" onclick="return accordianFun()"><i id="icon-acc" class="fa-solid fa-chevron-right fa-chevron-down trasition-all duration-500"></i> Completed</button>
+                              <div class="px-4 py-2 hidden" id="content-acc">
+                                <ul>
+                                    <% for(let tData of taskData){ if(tData.status == "complete"){ %>
+                                        <li
+                                            class="border-b hover:rounded-lg trasition-all duration-300"
+                                        >
+                                            <div
+                                                class="sub flex flex-wrap items-center justify-between hover:bg-gray-300 duration-300 rounded-lg py-2 px-3"
+                                            >
+                                                <div class="w-11/12">
+                                                    <div
+                                                        class="flex items-center w-[-webkit-fill-available]"
+                                                    >
+                                                        <input
+                                                            type="radio"
+                                                            onclick="assignToPending('<%= tData.id %>')"
+                                                            id="<%= tData.id %>-radio"
+                                                            checked=""
+                                                        />
+                                                        <p
+                                                            id="<%= tData.id %>"
+                                                            class="font-medium text-sm text-stone-500 ml-3 line-through"
+                                                        >
+                                                            <%= tData.taskName %>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="w-1/12 text-end">
+                                                    <button
+                                                        onclick="return editTaskModel('<%= tData.id %>')"
+                                                        class="rounded-lg trasition-all text-stone-500 duration-500"
+                                                    >
+                                                        <i
+                                                            class="fa-solid fa-angle-right"
+                                                        ></i>
+                                                    </button>
+                                                </div>
+                                                <% dd = tData.dueDate.split(/\D/g) %> <% let
+                                                date = [dd[2],dd[1],dd[0]].join("-") %>
+                                                <div class="ml-6">
+                                                    <div class="flex items-center">
+                                                        <span class="flex items-center">
+                                                            <i
+                                                                class="font-medium text-stone-500 ms-0.5 fa-solid fa-calendar-xmark"
+                                                            ></i>
+                                                            <p
+                                                                class="font-medium text-xs text-stone-500 ml-2"
+                                                            >
+                                                                <%= date %>
+                                                            </p>
+                                                        </span>
+                                                        <span
+                                                            class="w-[1.5px] h-5 bg-zinc-200 mx-5"
+                                                        ></span>
+                                                        <span class="flex items-center">
+                                                            <span
+                                                                class="bg-[<%= tData.taskList.listColor %>] h-4 w-4 inline-block rounded-md"
+                                                            ></span>
+                                                            <p
+                                                                class="font-medium text-xs text-stone-500 ml-2"
+                                                            >
+                                                                <%= tData.taskList.listName
+                                                                %>
+                                                            </p>
+                                                        </span>
+                                                        <span
+                                                            class="w-[1.5px] h-5 bg-zinc-200 mx-5"
+                                                        ></span>
+                                                        <span class="flex items-center">
+                                                            <% for(let tgData of tagData){
+                                                            %>
+                                                            <span
+                                                                class="font-bold text-[13px] bg-[#d1eaed] py-[5px] px-3 rounded-lg ms-2 <% if(tData.taskTags.includes(tgData.id)){ %> block <% } else { %> hidden <% } %>"
+                                                            >
+                                                                <p
+                                                                    class="font-medium text-xs text-stone-500"
+                                                                >
+                                                                    <%= tgData.tagName %>
+                                                                </p>
+                                                            </span>
+                                                            <% } %>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <div class=" items-center justify-between hover:bg-gray-300 rounded-lg">
+                                                        <span class="ml-6">
+                                                            <i class="fa-solid fa-calendar-xmark"></i>
+                                                        </span>
+                                                    </div> -->
+                                        </li>
+                                    <% } } %>
+                                </ul>
+                              </div>
+                            </div>
+                          <!-- </div> -->
+  
                     </section>
 
                     <section id="task-model" class="relative"></section>
@@ -660,18 +711,43 @@
                 });
             };
 
+            let assignToComplete = (id) => {
+                document.getElementById(id).classList.add("line-through")
+                $.ajax({
+                    url: `/assignToComplete/?id=${id}`,
+                    success: (res) => {
+                        $("#ajax-home").html(res)
+                    }
+                })
+            }
+
+            let assignToPending = (id) => {
+                document.getElementById(`${id}-radio`).checked = false; 
+                $.ajax({
+                    url: `/assignToPending/?id=${id}`,
+                    success: (res) => {
+                        $("#ajax-home").html(res)
+                    }
+                })
+                // document.getElementById(id).classList.remove("line-through")
+                // document.getElementById(`${id}-radio`).removeAttribute("checked")
+                // document.getElementById(`${id}-radio`).setAttribute("unchecked", "true")
+                // $.ajax({
+                //     url: `/assignToComplete/?id=${id}`
+                // })
+            }
+
             let closeModel = () => {
                 document.querySelector("main").classList.remove("pe-0");
                 document.getElementById("main-body").classList.remove("w-8/12");
                 document.getElementById("main-body").classList.add("w-full");
                 document.getElementById("task-model").classList.add("hidden");
             };
-
-            $(document).ready(function () {
-                $("#selectAll").click(function () {
-                    $(".checkboxSub").attr("checked", this.checked);
-                });
-            });
+            
+            let accordianFun = () => {
+                document.getElementById("content-acc").classList.toggle("hidden")
+                document.getElementById("icon-acc").classList.toggle("fa-chevron-right")
+            };
         </script>
         <% if(locals.flash.success && locals.flash.success.length > 0){ %>
         <script>
