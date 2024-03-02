@@ -100,8 +100,6 @@ routes.post("/insertTag", homeController.insertTag);
 
 routes.get("/viewTaskOnTag", homeController.viewTaskOnTag);
 
-routes.post("/deleteMul", homeController.deleteMul);
-
 routes.get("/viewProfile", homeController.viewProfile);
 
 routes.post("/editProfile", User.uploadImage, homeController.editProfile);
@@ -113,5 +111,7 @@ routes.get("/toComplete", homeController.toComplete);
 routes.get("/assignToPending", homeController.assignToPending);
 
 routes.get("/toPending", homeController.toPending);
+
+routes.get("/upcomingTask", homeController.upcomingTask);
 
 module.exports = routes;

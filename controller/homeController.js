@@ -24,16 +24,38 @@ module.exports.home = async (req, res) => {
                 .exec();
             let listData = await List.find({ userId: res.locals.user._id });
             let tagData = await Tag.find({ userId: res.locals.user._id });
-            let countTaskData = await Task.find({
-                userId: res.locals.user._id,
-            }).countDocuments();
             let listId = "";
+            let taskDate = [],
+                newData = [],
+                upcoming = [],
+                year = new Date().getFullYear(),
+                month = new Date().getMonth() + 1,
+                day = new Date().getDate(),
+                i = 0;
+            for (let tData of taskData) {
+                taskDate.push(tData.dueDate.split("-"));
+                if (
+                    taskDate[i][0] == year &&
+                    taskDate[i][1] == month &&
+                    taskDate[i][2] == day
+                ) {
+                    newData.push(tData);
+                } else if (
+                    taskDate[i][0] > year ||
+                    taskDate[i][1] > month ||
+                    taskDate[i][2] > day
+                ) {
+                    upcoming.push(tData);
+                }
+                i++;
+            }
             return res.render("home", {
-                taskData: taskData,
+                taskData: newData,
                 listData: listData,
                 tagData: tagData,
-                countTaskData: countTaskData,
+                countTaskData: newData.length,
                 listId: listId,
+                upcomingCount: upcoming.length,
             });
         } else {
             return res.redirect("/");
@@ -533,6 +555,7 @@ module.exports.viewTaskOnList = async (req, res) => {
             })
                 .populate("taskList")
                 .exec();
+            let titleName = await List.findById(req.query.id);
             let countTaskData = await Task.find({
                 userId: res.locals.user._id,
             }).countDocuments();
@@ -540,12 +563,30 @@ module.exports.viewTaskOnList = async (req, res) => {
             let tagData = await Tag.find({ userId: res.locals.user._id });
             let listId = req.query.id;
             if (taskData) {
+                let taskDate = [],
+                    newData = [],
+                    year = new Date().getFullYear(),
+                    month = new Date().getMonth() + 1,
+                    day = new Date().getDate(),
+                    i = 0;
+                for (let tData of taskData) {
+                    taskDate.push(tData.dueDate.split("-"));
+                    if (
+                        taskDate[i][0] > year ||
+                        taskDate[i][1] > month ||
+                        taskDate[i][2] > day
+                    ) {
+                        newData.push(tData);
+                    }
+                    i++;
+                }
                 return res.render("ajax_home_list", {
                     taskData: taskData,
                     listData: listData,
                     tagData: tagData,
                     countTaskData: countTaskData,
                     listId: listId,
+                    titleName: titleName.listName,
                 });
             } else {
                 console.log("Task not found");
@@ -687,6 +728,7 @@ module.exports.viewTaskOnTag = async (req, res) => {
         })
             .populate("taskList")
             .exec();
+        let titleName = await Tag.findById(req.query.id);
         let listData = await List.find({ userId: res.locals.user._id });
         let tagData = await Tag.find({ userId: res.locals.user._id });
         let countTaskData = await Task.find({
@@ -700,59 +742,10 @@ module.exports.viewTaskOnTag = async (req, res) => {
             tagData: tagData,
             countTaskData: countTaskData,
             listId: listId,
+            titleName: titleName.tagName,
         });
     } else {
         console.log("Invalid parameters");
-        return res.redirect("back");
-    }
-};
-
-module.exports.deleteMul = async (req, res) => {
-    try {
-        if (req.body) {
-            let taskData = await Task.find({}).populate("taskList").exec();
-            let listData, editListData, pos;
-            if (taskData) {
-                req.body.pos.map(async (v, i) => {
-                    listData = await List.findById(taskData[v].taskList.id);
-                    if (listData) {
-                        pos = parseInt(
-                            listData.taskIds.indexOf(taskData[v].id)
-                        );
-                        if (pos >= 0) {
-                            listData.taskIds.splice(pos, 1);
-                            editListData = await List.findByIdAndUpdate(
-                                taskData[v].taskList.id,
-                                listData
-                            );
-                            if (editListData) {
-                                let deleteTask = await Task.findByIdAndDelete(
-                                    taskData[v].id
-                                );
-                                console.log("deleted");
-                            } else {
-                                console.log("List not update");
-                                // return res.redirect("back");
-                            }
-                        } else {
-                            console.log("Invalid List");
-                            // return res.redirect("back");
-                        }
-                    } else {
-                        console.log("List not found");
-                        // return res.redirect("back");
-                    }
-                });
-            } else {
-                console.log("Task not found");
-                // return res.redirect("back");
-            }
-        } else {
-            console.log("Invalid parameters");
-            // return res.redirect("back");
-        }
-    } catch (err) {
-        console.log(err);
         return res.redirect("back");
     }
 };
@@ -923,6 +916,47 @@ module.exports.toPending = async (req, res) => {
             tagData: tagData,
             countTaskData: countTaskData,
             listId: listId,
+        });
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.upcomingTask = async (req, res) => {
+    try {
+        let taskData = await Task.find({
+            userId: res.locals.user._id,
+        })
+            .populate("taskList")
+            .exec();
+        let taskDate = [],
+            newData = [],
+            year = new Date().getFullYear(),
+            month = new Date().getMonth() + 1,
+            day = new Date().getDate(),
+            i = 0;
+        for (let tData of taskData) {
+            taskDate.push(tData.dueDate.split("-"));
+            if (
+                taskDate[i][0] > year ||
+                taskDate[i][1] > month ||
+                taskDate[i][2] > day
+            ) {
+                newData.push(tData);
+            }
+            i++;
+        }
+        let listData = await List.find({ userId: res.locals.user._id });
+        let tagData = await Tag.find({ userId: res.locals.user._id });
+        let listId = "";
+        return res.render("ajax_home_list", {
+            taskData: newData,
+            listData: listData,
+            tagData: tagData,
+            countTaskData: newData.length,
+            listId: listId,
+            titleName: "Upcoming",
         });
     } catch (err) {
         console.log(err);
