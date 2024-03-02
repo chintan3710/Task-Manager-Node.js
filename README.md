@@ -39,6 +39,6 @@ And connect to the database
 -   Passport-js
 -   MongoDB
 
-## Technologies Used
+## Important
 
 Make sure that you have good internet connection
