@@ -114,4 +114,6 @@ routes.get("/toPending", homeController.toPending);
 
 routes.get("/upcomingTask", homeController.upcomingTask);
 
+routes.get("/viewAllTask", homeController.viewAllTask);
+
 module.exports = routes;

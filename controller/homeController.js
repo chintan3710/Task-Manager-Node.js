@@ -41,8 +41,8 @@ module.exports.home = async (req, res) => {
                 ) {
                     newData.push(tData);
                 } else if (
-                    taskDate[i][0] > year ||
-                    taskDate[i][1] > month ||
+                    taskDate[i][0] >= year &&
+                    taskDate[i][1] >= month &&
                     taskDate[i][2] > day
                 ) {
                     upcoming.push(tData);
@@ -53,9 +53,11 @@ module.exports.home = async (req, res) => {
                 taskData: newData,
                 listData: listData,
                 tagData: tagData,
-                countTaskData: newData.length,
+                countTaskData: taskData.length,
                 listId: listId,
+                todayCount: newData.length,
                 upcomingCount: upcoming.length,
+                upcomingActive: false,
             });
         } else {
             return res.redirect("/");
@@ -549,6 +551,11 @@ module.exports.insertList = async (req, res) => {
 module.exports.viewTaskOnList = async (req, res) => {
     try {
         if (req.query) {
+            let allTaskData = await Task.find({
+                userId: res.locals.user._id,
+            })
+                .populate("taskList")
+                .exec();
             let taskData = await Task.find({
                 userId: res.locals.user._id,
                 taskList: req.query.id,
@@ -565,18 +572,25 @@ module.exports.viewTaskOnList = async (req, res) => {
             if (taskData) {
                 let taskDate = [],
                     newData = [],
+                    upcoming = [],
                     year = new Date().getFullYear(),
                     month = new Date().getMonth() + 1,
                     day = new Date().getDate(),
                     i = 0;
-                for (let tData of taskData) {
+                for (let tData of allTaskData) {
                     taskDate.push(tData.dueDate.split("-"));
                     if (
-                        taskDate[i][0] > year ||
-                        taskDate[i][1] > month ||
-                        taskDate[i][2] > day
+                        taskDate[i][0] == year &&
+                        taskDate[i][1] == month &&
+                        taskDate[i][2] == day
                     ) {
                         newData.push(tData);
+                    } else if (
+                        taskDate[i][0] >= year &&
+                        taskDate[i][1] >= month &&
+                        taskDate[i][2] > day
+                    ) {
+                        upcoming.push(tData);
                     }
                     i++;
                 }
@@ -587,6 +601,11 @@ module.exports.viewTaskOnList = async (req, res) => {
                     countTaskData: countTaskData,
                     listId: listId,
                     titleName: titleName.listName,
+                    todayCount: newData.length,
+                    upcomingCount: upcoming.length,
+                    activeLink: false,
+                    upcomingActive: false,
+                    todayActive: false,
                 });
             } else {
                 console.log("Task not found");
@@ -722,6 +741,11 @@ module.exports.insertTag = async (req, res) => {
 
 module.exports.viewTaskOnTag = async (req, res) => {
     if (req.query) {
+        let allTaskData = await Task.find({
+            userId: res.locals.user._id,
+        })
+            .populate("taskList")
+            .exec();
         let taskData = await Task.find({
             userId: res.locals.user._id,
             taskTags: req.query.id,
@@ -735,7 +759,31 @@ module.exports.viewTaskOnTag = async (req, res) => {
             userId: res.locals.user._id,
             status: "pending",
         }).countDocuments();
-        let listId = "";
+        let listId = "",
+            taskDate = [],
+            newData = [],
+            upcoming = [],
+            year = new Date().getFullYear(),
+            month = new Date().getMonth() + 1,
+            day = new Date().getDate(),
+            i = 0;
+        for (let tData of allTaskData) {
+            taskDate.push(tData.dueDate.split("-"));
+            if (
+                taskDate[i][0] == year &&
+                taskDate[i][1] == month &&
+                taskDate[i][2] == day
+            ) {
+                newData.push(tData);
+            } else if (
+                taskDate[i][0] >= year &&
+                taskDate[i][1] >= month &&
+                taskDate[i][2] > day
+            ) {
+                upcoming.push(tData);
+            }
+            i++;
+        }
         return res.render("ajax_home_list", {
             taskData: taskData,
             listData: listData,
@@ -743,6 +791,11 @@ module.exports.viewTaskOnTag = async (req, res) => {
             countTaskData: countTaskData,
             listId: listId,
             titleName: titleName.tagName,
+            todayCount: newData.length,
+            upcomingCount: upcoming.length,
+            activeLink: false,
+            upcomingActive: false,
+            todayActive: false,
         });
     } else {
         console.log("Invalid parameters");
@@ -811,7 +864,9 @@ module.exports.assignToComplete = async (req, res) => {
                 );
                 if (editData) {
                     req.flash("success", "Assign to completed");
-                    return res.redirect("/toComplete");
+                    return res.redirect(
+                        `/toComplete/?listId=${req.query.listId}&type=${req.query.type}`
+                    );
                 } else {
                     console.log("Data not updated");
                     return res.redirect("back");
@@ -832,11 +887,28 @@ module.exports.assignToComplete = async (req, res) => {
 
 module.exports.toComplete = async (req, res) => {
     try {
-        let taskData = await Task.find({
+        let allTaskData = await Task.find({
             userId: res.locals.user._id,
         })
             .populate("taskList")
             .exec();
+        let taskData = "";
+        let listId = null;
+        if (req.query.listId) {
+            listId = req.query.listId;
+            taskData = await Task.find({
+                userId: res.locals.user._id,
+                taskList: req.query.listId,
+            })
+                .populate("taskList")
+                .exec();
+        } else {
+            taskData = await Task.find({
+                userId: res.locals.user._id,
+            })
+                .populate("taskList")
+                .exec();
+        }
         let listData = await List.find({
             userId: res.locals.user._id,
         });
@@ -845,15 +917,62 @@ module.exports.toComplete = async (req, res) => {
         });
         let countTaskData = await Task.find({
             userId: res.locals.user._id,
-            status: "pending",
         }).countDocuments();
-        let listId = "";
+        let taskDate = [],
+            newData = [],
+            upcoming = [],
+            year = new Date().getFullYear(),
+            month = new Date().getMonth() + 1,
+            day = new Date().getDate(),
+            i = 0;
+        for (let tData of allTaskData) {
+            taskDate.push(tData.dueDate.split("-"));
+            if (
+                taskDate[i][0] == year &&
+                taskDate[i][1] == month &&
+                taskDate[i][2] == day
+            ) {
+                newData.push(tData);
+            } else if (
+                taskDate[i][0] >= year &&
+                taskDate[i][1] >= month &&
+                taskDate[i][2] > day
+            ) {
+                upcoming.push(tData);
+            }
+            i++;
+        }
+        let titleName = "All Task",
+            activeLink = true,
+            upcomingActive = false,
+            todayActive = false;
+        if (listId != null) {
+            titleName = taskData[0].taskList.listName;
+            activeLink = false;
+        }
+        if (req.query.type == "upcoming") {
+            taskData = upcoming;
+            titleName = "Upcoming";
+            activeLink = false;
+            upcomingActive = true;
+        } else if (req.query.type == "today") {
+            taskData = newData;
+            titleName = "Today";
+            activeLink = false;
+            todayActive = true;
+        }
         return res.render("ajax_home_list", {
             taskData: taskData,
             listData: listData,
             tagData: tagData,
             countTaskData: countTaskData,
             listId: listId,
+            titleName: titleName,
+            todayCount: newData.length,
+            upcomingCount: upcoming.length,
+            activeLink: activeLink,
+            upcomingActive: upcomingActive,
+            todayActive: todayActive,
         });
     } catch (err) {
         console.log(err);
@@ -873,7 +992,9 @@ module.exports.assignToPending = async (req, res) => {
                 );
                 if (editData) {
                     req.flash("success", "Assign to pending");
-                    return res.redirect("/toPending");
+                    return res.redirect(
+                        `/toPending/?listId=${req.query.listId}&type=${req.query.type}`
+                    );
                 } else {
                     console.log("Data not updated");
                     return res.redirect("back");
@@ -894,11 +1015,28 @@ module.exports.assignToPending = async (req, res) => {
 
 module.exports.toPending = async (req, res) => {
     try {
-        let taskData = await Task.find({
+        let allTaskData = await Task.find({
             userId: res.locals.user._id,
         })
             .populate("taskList")
             .exec();
+        let taskData,
+            listId = null;
+        if (req.query.listId) {
+            listId = req.query.listId;
+            taskData = await Task.find({
+                userId: res.locals.user._id,
+                taskList: req.query.listId,
+            })
+                .populate("taskList")
+                .exec();
+        } else {
+            taskData = await Task.find({
+                userId: res.locals.user._id,
+            })
+                .populate("taskList")
+                .exec();
+        }
         let listData = await List.find({
             userId: res.locals.user._id,
         });
@@ -907,15 +1045,62 @@ module.exports.toPending = async (req, res) => {
         });
         let countTaskData = await Task.find({
             userId: res.locals.user._id,
-            status: "complete",
         }).countDocuments();
-        let listId = "";
+        let taskDate = [],
+            newData = [],
+            upcoming = [],
+            year = new Date().getFullYear(),
+            month = new Date().getMonth() + 1,
+            day = new Date().getDate(),
+            i = 0;
+        for (let tData of allTaskData) {
+            taskDate.push(tData.dueDate.split("-"));
+            if (
+                taskDate[i][0] == year &&
+                taskDate[i][1] == month &&
+                taskDate[i][2] == day
+            ) {
+                newData.push(tData);
+            } else if (
+                taskDate[i][0] >= year &&
+                taskDate[i][1] >= month &&
+                taskDate[i][2] > day
+            ) {
+                upcoming.push(tData);
+            }
+            i++;
+        }
+        let titleName = "All Task",
+            activeLink = true,
+            upcomingActive = false,
+            todayActive = false;
+        if (listId != null) {
+            titleName = taskData[0].taskList.listName;
+            activeLink = false;
+        }
+        if (req.query.type == "upcoming") {
+            taskData = upcoming;
+            titleName = "Upcoming";
+            activeLink = false;
+            upcomingActive = true;
+        } else if (req.query.type == "today") {
+            taskData = newData;
+            titleName = "Today";
+            activeLink = false;
+            todayActive = true;
+        }
         return res.render("ajax_home_list", {
             taskData: taskData,
             listData: listData,
             tagData: tagData,
             countTaskData: countTaskData,
             listId: listId,
+            titleName: titleName,
+            todayCount: newData.length,
+            upcomingCount: upcoming.length,
+            activeLink: activeLink,
+            upcomingActive: upcomingActive,
+            todayActive: todayActive,
         });
     } catch (err) {
         console.log(err);
@@ -932,6 +1117,7 @@ module.exports.upcomingTask = async (req, res) => {
             .exec();
         let taskDate = [],
             newData = [],
+            upcoming = [],
             year = new Date().getFullYear(),
             month = new Date().getMonth() + 1,
             day = new Date().getDate(),
@@ -939,24 +1125,88 @@ module.exports.upcomingTask = async (req, res) => {
         for (let tData of taskData) {
             taskDate.push(tData.dueDate.split("-"));
             if (
-                taskDate[i][0] > year ||
-                taskDate[i][1] > month ||
-                taskDate[i][2] > day
+                taskDate[i][0] == year &&
+                taskDate[i][1] == month &&
+                taskDate[i][2] == day
             ) {
                 newData.push(tData);
+            } else if (
+                taskDate[i][0] >= year &&
+                taskDate[i][1] >= month &&
+                taskDate[i][2] > day
+            ) {
+                upcoming.push(tData);
             }
             i++;
         }
         let listData = await List.find({ userId: res.locals.user._id });
         let tagData = await Tag.find({ userId: res.locals.user._id });
-        let listId = "";
+        let listId = null;
         return res.render("ajax_home_list", {
-            taskData: newData,
+            taskData: upcoming,
             listData: listData,
             tagData: tagData,
-            countTaskData: newData.length,
+            countTaskData: taskData.length,
             listId: listId,
             titleName: "Upcoming",
+            todayCount: newData.length,
+            upcomingCount: upcoming.length,
+            activeLink: false,
+            upcomingActive: true,
+            todayActive: false,
+        });
+    } catch (err) {
+        console.log(err);
+        return res.redirect("back");
+    }
+};
+
+module.exports.viewAllTask = async (req, res) => {
+    try {
+        let taskData = await Task.find({
+            userId: res.locals.user._id,
+        })
+            .populate("taskList")
+            .exec();
+        let listData = await List.find({ userId: res.locals.user._id });
+        let tagData = await Tag.find({ userId: res.locals.user._id });
+        let listId = null,
+            taskDate = [],
+            newData = [],
+            upcoming = [],
+            year = new Date().getFullYear(),
+            month = new Date().getMonth() + 1,
+            day = new Date().getDate(),
+            i = 0;
+        for (let tData of taskData) {
+            taskDate.push(tData.dueDate.split("-"));
+            if (
+                taskDate[i][0] == year &&
+                taskDate[i][1] == month &&
+                taskDate[i][2] == day
+            ) {
+                newData.push(tData);
+            } else if (
+                taskDate[i][0] >= year &&
+                taskDate[i][1] >= month &&
+                taskDate[i][2] > day
+            ) {
+                upcoming.push(tData);
+            }
+            i++;
+        }
+        return res.render("ajax_home_list", {
+            taskData: taskData,
+            listData: listData,
+            tagData: tagData,
+            countTaskData: taskData.length,
+            listId: listId,
+            titleName: "All Task",
+            todayCount: newData.length,
+            upcomingCount: upcoming.length,
+            activeLink: true,
+            upcomingActive: false,
+            todayActive: false,
         });
     } catch (err) {
         console.log(err);

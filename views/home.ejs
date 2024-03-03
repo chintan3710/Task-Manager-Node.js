@@ -9,13 +9,20 @@
             .active-link span.num {
                 background-color: #ffffff !important;
             }
+            header::-webkit-scrollbar {
+                width: 5px;
+            }
+            header::-webkit-scrollbar-thumb {
+                height: 1px !important;
+                background: #a8a8a8;
+            }
         </style>
     </head>
     <body>
         <!-- Header -->
         <div id="ajax-home">
             <header
-                class="bg-[#f4f4f4] h-screen w-[300px] px-10 py-5 fixed top-0 left-0 bottom-0"
+                class="bg-[#f4f4f4] h-screen w-[300px] px-10 py-5 fixed top-0 left-0 bottom-0 overflow-y-scroll"
                 id="header"
             >
                 <nav class="h-full flex flex-col justify-between">
@@ -66,7 +73,7 @@
                             <li>
                                 <a
                                     href="/"
-                                    class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 active-link"
+                                    class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 active-link w-full"
                                 >
                                     <p
                                         class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black"
@@ -78,7 +85,7 @@
                                     </p>
                                     <span
                                         class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white"
-                                        ><%= countTaskData %></span
+                                        ><%= todayCount %></span
                                     >
                                 </a>
                             </li>
@@ -120,9 +127,10 @@
                         <p class="text-xs font-medium my-2">Lists</p>
                         <ul class="ml-1 pb-5 border-b">
                             <li>
-                                <a
-                                    href="/"
-                                    class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 <% if(!listId){ %> active-link <% } %>"
+                                <button
+                                    onclick="return viewAllTaskFun()"
+                                    class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500 w-full"
+                                    id="allTaskBtn"
                                 >
                                     <p
                                         class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black"
@@ -136,7 +144,7 @@
                                         class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white"
                                         ><%= countTaskData %></span
                                     >
-                                </a>
+                                </button>
                             </li>
                             <% for(let lData of listData){ %>
                             <li class="relative">
@@ -260,7 +268,7 @@
                                     Today
                                     <span
                                         class="border font-semibold inline-block h-[45px] w-[45px] text-center leading-[45px] rounded-lg ml-5"
-                                        ><%= countTaskData %></span
+                                        ><%= todayCount %></span
                                     >
                                 </h2>
                                 <!-- <div class="mt-5"> -->
@@ -313,7 +321,7 @@
                                             <input
                                                 type="radio"
                                                 name="task-pending"
-                                                onchange="assignToComplete('<%= tData.id %>')"
+                                                onchange="assignToComplete('<%= tData.id %>','','today')"
                                             />
                                             <p
                                                 id="<%= tData.id %>"
@@ -420,7 +428,7 @@
                                                     >
                                                         <input
                                                             type="radio"
-                                                            onclick="assignToPending('<%= tData.id %>')"
+                                                            onclick="assignToPending('<%= tData.id %>','','today')"
                                                             id="<%= tData.id %>-radio"
                                                             checked=""
                                                         />
@@ -689,20 +697,22 @@
                 });
             };
 
-            let assignToComplete = (id) => {
+            let assignToComplete = (id, listId, type) => {
                 document.getElementById(id).classList.add("line-through")
                 $.ajax({
-                    url: `/assignToComplete/?id=${id}`,
+                    url: `/assignToComplete/?id=${id}&listId=${listId}&type=${type}`,
+                    method: "get",
                     success: (res) => {
                         $("#ajax-home").html(res)
                     }
                 })
             }
-
-            let assignToPending = (id) => {
+            
+            let assignToPending = (id, listId, type) => {
                 document.getElementById(`${id}-radio`).checked = false; 
                 $.ajax({
-                    url: `/assignToPending/?id=${id}`,
+                    url: `/assignToPending/?id=${id}&listId=${listId}&type=${type}`,
+                    method: "get",
                     success: (res) => {
                         $("#ajax-home").html(res)
                     }
@@ -712,6 +722,17 @@
             let viewUpcomingTask = () => {
                 $.ajax({
                     url: "/upcomingTask",
+                    method: "get",
+                    success: (res) => {
+                        $("#ajax-home").html(res)
+                    }
+                })
+            }
+
+            let viewAllTaskFun = () => {
+                $.ajax({
+                    url: "/viewAllTask",
+                    method: "get",
                     success: (res) => {
                         $("#ajax-home").html(res)
                     }
