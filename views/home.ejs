@@ -1,5 +1,8 @@
         <%- include('cdn') %>
         <style>
+            *{
+                outline: none !important;
+            }
             .active-link {
                 background-color: #d1d5db !important;
             }
@@ -35,18 +38,6 @@
                             class="w-[150px]"
                         />
                     </a>
-                    <!-- <button id="toggle-btn" class="toggle-btn text-stone-400 text-2xl">
-                        <i class="fa-solid fa-bars"></i>
-                    </button> -->
-
-                    <!-- Search Bar -->
-                    <!-- <div class="relative w-fit">
-                        <input type="search" class="border rounded-lg py-1 pr-4 pl-8" placeholder="Search"/>
-                        <span class="text-stone-400 absolute left-2 top-2/4 -translate-y-2/4">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </span>
-                    </div> -->
-
                     <!-- Tasks Table -->
                     <div>
                         <p class="text-xs font-medium my-2">TASKS</p>
@@ -87,36 +78,6 @@
                                         class="num w-[35px] text-center font-semibold text-sm bg-zinc-200 rounded-lg text-stone-700 group-hover:bg-white"
                                         ><%= todayCount %></span
                                     >
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href=""
-                                    class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500"
-                                >
-                                    <p
-                                        class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black"
-                                    >
-                                        <i
-                                            class="fa-solid fa-calendar-days text-zinc-400 mr-3"
-                                        ></i>
-                                        Calender
-                                    </p>
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href=""
-                                    class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500"
-                                >
-                                    <p
-                                        class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black"
-                                    >
-                                        <i
-                                            class="fa-solid fa-note-sticky text-zinc-400 mr-3"
-                                        ></i>
-                                        Sticky Wall
-                                    </p>
                                 </a>
                             </li>
                         </ul>
@@ -225,35 +186,46 @@
                     <!-- Account Table -->
                     <div>
                         <ul>
-                            <li>
+                            <li class="relative">
                                 <button
-                                    onclick="return viewProfileFun('<%= locals.user._id %>')"
+                                    onclick="return showMenu()"
                                     class="w-full group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500"
                                 >
                                     <p
                                         class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black"
                                     >
                                         <i
-                                            class="fa-solid fa-user text-zinc-400 mr-3"
+                                            class="fa-solid fa-gear text-zinc-400 mr-3"
                                         ></i>
-                                        Profile
+                                        Account Settings
                                     </p>
                                 </button>
-                            </li>
-                            <li>
-                                <a
-                                    href="/logoutUser"
-                                    class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500"
-                                >
-                                    <p
-                                        class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black"
-                                    >
-                                        <i
-                                            class="fa-solid fa-power-off text-zinc-400 mr-3"
-                                        ></i>
-                                        Log Out
-                                    </p>
-                                </a>
+                                <ul class="flex flex-col hidden absolute bottom-full bg-white rounded-lg w-full" id="menu-list">
+                                    <li>
+                                        <button onclick="return viewProfileFun('65e434814027ab6ea49b1329')" class="w-full py-2 px-3 group flex items-center justify-between rounded-lg hover:bg-gray-300 trasition-all duration-500">
+                                            <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                                <i class="fa-solid fa-user text-zinc-400 mr-3"></i>
+                                                Profile
+                                            </p>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <a href="/logoutUser" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
+                                            <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                                <i class="fa-solid fa-unlock text-zinc-400 mr-3"></i>
+                                                Change Password
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/logoutUser" class="group flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-300 trasition-all duration-500">
+                                            <p class="font-medium text-sm text-stone-500 flex items-center group-hover:text-black">
+                                                <i class="fa-solid fa-power-off text-zinc-400 mr-3"></i>
+                                                Log Out
+                                            </p>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -271,24 +243,8 @@
                                         ><%= todayCount %></span
                                     >
                                 </h2>
-                                <!-- <div class="mt-5"> -->
-                                <!-- <span class="border px-3 py-2 rounded-lg">
-                                        <i class="fa-regular fa-trash-can"></i>
-                                    </span> -->
-                                <!-- <label for="task-list" class="block text-sm font-medium leading-6 text-gray-600 mb-2">Assign To List:</label> -->
-                                <!-- <select name="actionTask" class=" rounded-md border-0 outline-none shadow-lg ml-3 py-2
-                                     pl-3 pr-10 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6" id="action-task">
-                                        <option value="" disabled="" selected="">Action for task</option>                                        
-                                        <option value="">Delete</option>
-                                        <option value="">Complete</option>
-                                    </select> -->
-                                <!-- <button  class="group font-bold  py-[5px] px-3 rounded-lg hover:bg-gray-300 hover:text-black trasition-all duration-500">
-                                            <i class="fa-solid fa-check"></i>
-                                        </button> -->
-                                <!-- </div> -->
                             </div>
                         </div>
-                        <!-- <form action="/actionTask" method="post"> -->
                         <ul>
                             <li>
                                 <button
@@ -389,11 +345,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class=" items-center justify-between hover:bg-gray-300 rounded-lg">
-                                            <span class="ml-6">
-                                                <i class="fa-solid fa-calendar-xmark"></i>
-                                            </span>
-                                        </div> -->
                             </li>
                             <% } } } else{ %>
                             <li
@@ -405,10 +356,6 @@
                             </li>
                             <% } %>
                         </ul>
-                        <!-- </form> -->
-
-                        
-                        <!-- <div class="max-w-md mx-auto"> -->
 
                             <!-- Accordion Item 1 -->
                             <div class="rounded-md mb-4">
@@ -498,11 +445,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- <div class=" items-center justify-between hover:bg-gray-300 rounded-lg">
-                                                        <span class="ml-6">
-                                                            <i class="fa-solid fa-calendar-xmark"></i>
-                                                        </span>
-                                                    </div> -->
                                         </li>
                                     <% } } %>
                                 </ul>
@@ -518,7 +460,6 @@
         </div>
 
         <!-- Javascript -->
-        <!-- <script type="javascript" src="/js/script.js"></script> -->
         <script>
             let taskModel = () => {
                 document
@@ -750,6 +691,10 @@
                 document.getElementById("content-acc").classList.toggle("hidden")
                 document.getElementById("icon-acc").classList.toggle("fa-chevron-right")
             };
+
+            let showMenu = () => {
+                document.getElementById('menu-list').classList.toggle('hidden')
+            }
         </script>
         <% if(locals.flash.success && locals.flash.success.length > 0){ %>
         <script>

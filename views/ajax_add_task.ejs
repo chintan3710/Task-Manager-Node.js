@@ -55,9 +55,9 @@
                     <option value="" disabled="" selected="">
                         -- Select Task List --
                     </option>
-                    <% listData.map((v, i) => { %>
+                    <% <% if(listData){ listData.map((v, i) => { %>
                     <option value="<%= v.id %>"><%= v.listName %></option>
-                    <% }); %>
+                    <% });} %>
                 </select>
             </div>
             <div class="mt-5">
@@ -79,7 +79,7 @@
                     >Task Tags (Optional):</label
                 >
                 <div class="flex flex-wrap ml-3">
-                    <% tagData.map((v, i) => { %>
+                    <% <% if(tagData){ tagData.map((v, i) => { %>
                     <label class="flex">
                         <input
                             type="checkbox"
@@ -88,7 +88,7 @@
                         />
                         <span class="mx-2"><%= v.tagName %></span>
                     </label>
-                    <% }); %>
+                    <% });} %>
                 </div>
             </div>
         </div>
