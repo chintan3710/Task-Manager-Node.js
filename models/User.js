@@ -4,7 +4,7 @@ const multer = require("multer");
 
 const path = require("path");
 
-const imagePath = "/var/task/uploads";
+const imagePath = "/uploads";
 
 const UserSchema = mongoose.Schema({
     name: {
