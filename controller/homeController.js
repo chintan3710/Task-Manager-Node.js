@@ -156,7 +156,7 @@ module.exports.signUpUser = async (req, res) => {
                         const info = await transporter.sendMail({
                             from: "yom.no.replay@gmail.com",
                             to: req.body.email,
-                            subject: "Sent Pass",
+                            subject: "Profile information",
                             text: "Your password is here!",
                             html: `${newFileContents}`,
                         });
