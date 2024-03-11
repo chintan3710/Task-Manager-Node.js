@@ -828,12 +828,10 @@ module.exports.viewProfile = async (req, res) => {
 module.exports.editProfile = async (req, res) => {
     try {
         let oldData = await User.findById(req.body.id);
+        let fullPath = "/var/task";
         if (req.file) {
             if (oldData.profileImage) {
-                let fullPath = path.join(
-                    __dirname,
-                    ".." + oldData.profileImage
-                );
+                fullPath = path.join(__dirname, ".." + oldData.profileImage);
                 await fs.unlinkSync(fullPath);
             }
             let imagePath = "";
