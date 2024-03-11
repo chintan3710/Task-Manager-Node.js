@@ -9,7 +9,7 @@ passport.use(
         {
             clientID: process.env.GITHUB_CLIENT_ID,
             clientSecret: process.env.GITHUB_CLIENT_SECRET,
-            callbackURL: "http://localhost:8002/github/callback",
+            callbackURL: "https://dot-done.vercel.app/github/callback",
         },
         async (accessToken, refreshToken, profile, cb) => {
             let checkId = await UserGithub.findOne({

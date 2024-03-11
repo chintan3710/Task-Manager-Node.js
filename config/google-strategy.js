@@ -11,7 +11,7 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "http://localhost:8002/google/callback",
+            callbackURL: "https://dot-done.vercel.app/google/callback",
         },
         async (accessToken, refreshToken, profile, cb) => {
             let checkemail = await User.findOne({
