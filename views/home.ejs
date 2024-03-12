@@ -28,7 +28,15 @@
                 class="bg-[#f4f4f4] h-screen w-[300px] px-10 py-5 fixed top-0 left-0 bottom-0 overflow-y-scroll"
                 id="header"
             >
-                <nav class="h-full flex flex-col justify-between">
+                <a href="/" class="w-fit mx-auto text-center block lg:hidden">
+                    <img
+                        src="/img/logo.png"
+                        alt="logo"
+                        title="logo"
+                        class="w-[150px]"
+                    />
+                </a>
+                <nav class="h-full flex flex-col justify-between hidden lg:flex">
                     <!-- Logo & Toggle -->
                     <a href="/" class="w-fit mx-auto text-center">
                         <img
@@ -230,6 +238,7 @@
                         </ul>
                     </div>
                 </nav>
+                
             </header>
             <main class="ml-[300px] px-6">
                 <div id="after-flex">
